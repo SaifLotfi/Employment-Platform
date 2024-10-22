@@ -1,0 +1,1 @@
+- No two employee should have duplicate profiles with the same National Id.

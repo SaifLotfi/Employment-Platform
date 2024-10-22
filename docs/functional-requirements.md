@@ -1,0 +1,10 @@
+- The Employee/Employer shall be able to sign up using his email and set a password..
+- The Employee/Employer shall be able to login using his email & password.
+- The Employer shall be able to  post jobs and provide details. 
+- The Employer shall be able to  search for Employees and filter them based on his preference 
+- The Employer shall be able to Accept or Reject The Employees applications 
+- The System shall send Acceptance or Rejection Emails to Employees
+- The System shall suggest Jobs to Employees based on their information.
+- The Employee shall search for jobs and filter them based on his preference.
+- The Employee shall apply for a job.
+- The System shall allow the Employee to view his profile information and the number of views of his profile.
