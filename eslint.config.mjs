@@ -25,10 +25,10 @@ export default [
     rules: {
       '@typescript-eslint/no-unused-vars': 'off',
       'security/detect-object-injection': 'off',
-      '@typescript-eslint/naming-convention': 'off',
+      '@typescript-eslint/naming-convention': 'error',
     },
   },
   {
-    ignores: ['eslint.config.mjs', 'jest.config.ts'],
+    ignores: ['eslint.config.mjs'],
   },
 ];
