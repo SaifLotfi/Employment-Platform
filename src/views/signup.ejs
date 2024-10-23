@@ -1,0 +1,45 @@
+<%- include('layout/header') %>
+</head>
+<%- include('layout/nav-start') %>
+<%- include('layout/home-nav-list') %>
+<%- include('layout/nav-end') %>
+<div class="container d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
+    <h1 class="mb-4">Sign Up</h1>
+    <form class="w-50" action="/signup" method="POST">
+      <div class="row">
+        <div class="mb-3 col-md-6">
+          <label for="name" class="form-label">Name</label>
+          <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+        </div>
+        <div class="mb-3 col-md-6">
+          <label for="email" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+        </div>
+        <div class="mb-3 col-md-6">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+        <div class="mb-3 col-md-6">
+          <label for="nationalId" class="form-label">National Id</label>
+          <input type="text" class="form-control" id="nationalId" name="national_id" placeholder="Enter Your National Id" required>
+        </div>
+        <div class="mb-3 col-md-6">
+          <label for="city" class="form-label">City</label>
+          <input type="text" class="form-control" id="city" name="city" placeholder="Enter Your City" required>
+        </div>
+        <div class="input-group mb-3 col-md-6">
+          <select class="form-select" id="inputGroupSelect02">
+            <option selected>Choose Your Experience Level...</option>
+            <option value="1">Intern</option>
+            <option value="2">Junior</option>
+            <option value="3">Mid-Level</option>
+            <option value="4">Senior</option>
+            <option value="5">Lead</option>
+            <option value="6">Architect</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+    </form>
+  </div>
+<%- include('layout/footer') %>
