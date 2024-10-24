@@ -1,8 +1,8 @@
-import { employeeDao } from "../models/employee.model";
+import { employeeRepository } from "../models/employee.model";
 import { Request, Response } from "express";
 
 const createEmployee = async (req:Request, res:Response) => {
-  const employee = await employeeDao.createEmployee(req.body);
+  const employee = await employeeRepository.createEmployee(req.body);
   res.redirect('/');
 };
 
