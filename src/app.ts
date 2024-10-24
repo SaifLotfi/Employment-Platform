@@ -8,6 +8,10 @@ import employerRouter from './routes/employer.routes';
 
 import bodyParser from 'body-parser';
 
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
