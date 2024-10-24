@@ -7,11 +7,16 @@ router.get('/', (req, res) => {
 });
 
 router.get('/employee/signup', (req, res) => {
-  res.render('signup', { title: 'signup', path: '/signup' });
+  res.render('employee-signup', { title: 'signup', path: '/signup' });
+});
+
+router.get('/employer/signup', (req, res) => {
+  res.render('employer-signup', { title: 'signup', path: '/signup' });
 });
 
 router.get('/employee/login', (req, res) => {
   res.render('login', { title: 'login', path: '/login' });
 });
+
 
 export default router;

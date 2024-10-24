@@ -4,6 +4,8 @@ import viewsRouter from './routes/routes';
 
 import employeeRouter from './routes/employee.routes';
 
+import employerRouter from './routes/employer.routes';
+
 import bodyParser from 'body-parser';
 
 const app = express();
@@ -18,6 +20,8 @@ app.use(viewsRouter);
 
 app.use(employeeRouter);
 
+app.use(employerRouter);
+
 app.listen(3000, () => {
-  console.log('Example app listening on port 3000!');
+  console.log('App listening on port 3000!');
 });

@@ -33,7 +33,7 @@ model Employer {
   name     String
   password String
   compId   String
-  Company  Company @relation(fields: [compId], references: [compId])
+  company  Company @relation(fields: [compId], references: [compId])
   Job      Job[]
 }
 
