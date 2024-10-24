@@ -14,7 +14,7 @@ router.get('/employer/signup', (req, res) => {
   res.render('employer-signup', { title: 'signup', path: '/signup' });
 });
 
-router.get('/employee/login', (req, res) => {
+router.get('/login', (req, res) => {
   res.render('login', { title: 'login', path: '/login' });
 });
 
