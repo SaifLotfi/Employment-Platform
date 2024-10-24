@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Employee {
+  empId         String             @id @default(uuid())
+  nationalId    String             @unique
+  email         String             @unique
+  name          String
+  city          String
+  bio           String
+  expLevel      ExpLevel
+  password      String
+  numberOfViews Int
+  jobs          EmployeeJob[]
+  progLangs     EmployeeLanguage[]
+}
+
+model Employer {
+  empId    String  @id @default(uuid())
+  email    String  @unique
+  name     String
+  password String
+  compId   String
+  Company  Company @relation(fields: [compId], references: [compId])
+  Job      Job[]
+}
+
+model Company {
+  compId   String     @id @default(uuid())
+  name     String
+  Employer Employer[]
+}
+
+model Job {
+  jobId         String        @id @default(uuid())
+  employees     EmployeeJob[]
+  empId         String
+  employer      Employer      @relation(fields: [empId], references: [empId])
+  requiredLangs JobLanguage[]
+  title         String
+  description   String
+  expLevel      ExpLevel
+  salary        Int
+}
+
+model PragrammingLanguage {
+  langId    String             @id @default(uuid())
+  name      String
+  jobs      JobLanguage[]
+  employees EmployeeLanguage[]
+}
+
+// Many to Many Intermediate Tables
+
+model EmployeeJob {
+  empId    String
+  employee Employee @relation(fields: [empId], references: [empId])
+
+  jobId String
+  job   Job    @relation(fields: [jobId], references: [jobId])
+
+  @@id([empId, jobId])
+}
+
+model EmployeeLanguage {
+  empId    String
+  employee Employee @relation(fields: [empId], references: [empId])
+
+  langId   String
+  language PragrammingLanguage @relation(fields: [langId], references: [langId])
+
+  @@id([empId, langId])
+}
+
+model JobLanguage {
+  jobId String
+  job   Job    @relation(fields: [jobId], references: [jobId])
+
+  langId   String
+  language PragrammingLanguage @relation(fields: [langId], references: [langId])
+
+  @@id([jobId, langId])
+}
+
+enum ExpLevel {
+  Intern
+  Junior
+  MidLevel
+  Senior
+  Lead
+  Architect
+}

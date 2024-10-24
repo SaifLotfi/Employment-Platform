@@ -9,10 +9,12 @@
     "globals": "^15.11.0",
     "nodemon": "^3.1.7",
     "prettier": "^3.3.3",
+    "prisma": "^5.21.1",
     "ts-node": "^10.9.2",
     "typescript-eslint": "^8.11.0"
   },
   "dependencies": {
+    "@prisma/client": "^5.21.1",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.21.1",
