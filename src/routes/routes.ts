@@ -10,7 +10,7 @@ router.get('/employee/signup', (req, res) => {
   res.render('signup', { title: 'signup', path: '/signup' });
 });
 
-router.get('/login', (req, res) => {
+router.get('/employee/login', (req, res) => {
   res.render('login', { title: 'login', path: '/login' });
 });
 
