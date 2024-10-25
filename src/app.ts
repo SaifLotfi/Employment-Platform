@@ -2,6 +2,7 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import express from 'express';
 import 'express-async-errors';
+import cookieParser from 'cookie-parser';
 
 import globalErrorHandler from './middlewares/error-handler.middleware';
 import employeeRouter from './routes/employee.routes';
@@ -13,6 +14,8 @@ dotenv.config();
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(cookieParser());
 
 app.set('view engine', 'ejs');
 
