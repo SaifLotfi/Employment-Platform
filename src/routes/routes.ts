@@ -1,22 +1,30 @@
 import express from 'express';
+import {Request, Response} from 'express';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', (_req:Request, res:Response) => {
   res.render('home', { title: 'Home Page', path: '/' });
 });
 
-router.get('/employee/signup', (req, res) => {
+router.get('/employee/signup', (_req:Request, res:Response) => {
   res.render('employee-signup', { title: 'signup', path: '/signup' });
 });
 
-router.get('/employer/signup', (req, res) => {
+router.get('/employer/signup', (_req:Request, res:Response) => {
   res.render('employer-signup', { title: 'signup', path: '/signup' });
 });
 
-router.get('/login', (req, res) => {
+router.get('/login', (_req:Request, res:Response) => {
   res.render('login', { title: 'login', path: '/login' });
 });
 
+router.get('/500', (_req:Request, res:Response) => {
+  res.render('500', { title: 'Server Side Error', path: '/500' });
+});
+
+router.use((_req:Request, res:Response) => {
+  res.render('404', { title: 'Not Found', path: '/400' });
+});
 
 export default router;

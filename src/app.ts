@@ -1,14 +1,12 @@
-import express from 'express';
-
-import viewsRouter from './routes/routes';
-
-import employeeRouter from './routes/employee.routes';
-
-import employerRouter from './routes/employer.routes';
-
 import bodyParser from 'body-parser';
-
 import dotenv from 'dotenv';
+import express from 'express';
+import 'express-async-errors';
+
+import globalErrorHandler from './middlewares/error-handler.middleware';
+import employeeRouter from './routes/employee.routes';
+import employerRouter from './routes/employer.routes';
+import viewsRouter from './routes/routes';
 
 dotenv.config();
 
@@ -25,6 +23,8 @@ app.use(viewsRouter);
 app.use(employeeRouter);
 
 app.use(employerRouter);
+
+app.use(globalErrorHandler);
 
 app.listen(3000, () => {
   console.log('App listening on port 3000!');
