@@ -20,6 +20,16 @@ const createEmployer = async (employerData: CreateEmployerDTO) => {
   return employer;
 };
 
+export const getEmployer = async (email: string) => {
+  const employer = await prisma.employer.findUnique({
+    where: {
+      email,
+    },
+  });
+  return employer;
+};
+
 export const employerRepository: EmployerDao = {
   createEmployer,
+  getEmployer
 };
