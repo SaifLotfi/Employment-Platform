@@ -1,4 +1,5 @@
 import { ExpLevel } from "@prisma/client";
+
 export type CreateEmployeeDTO = {
     name: string;
     email: string;

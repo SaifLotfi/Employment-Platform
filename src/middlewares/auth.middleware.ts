@@ -18,3 +18,19 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
 
   next();
 };
+
+export const isEmployer = (_req: Request, res: Response, next: NextFunction) => {
+  if (res.locals.userType !== 'employer') {
+    return res.redirect('/');
+  }
+
+  next();
+};
+
+export const isEmployee = (_req: Request, res: Response, next: NextFunction) => {
+  if (res.locals.userType !== 'employee') {
+    return res.redirect('/');
+  }
+
+  next();
+};

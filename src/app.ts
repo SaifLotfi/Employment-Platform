@@ -8,6 +8,7 @@ import globalErrorHandler from './middlewares/error-handler.middleware';
 import employeeRouter from './routes/employee.routes';
 import employerRouter from './routes/employer.routes';
 import viewsRouter from './routes/routes';
+import jobRouter from './routes/job.routes';
 
 dotenv.config();
 
@@ -26,6 +27,8 @@ app.use(viewsRouter);
 app.use(employeeRouter);
 
 app.use(employerRouter);
+
+app.use(jobRouter);
 
 app.use(globalErrorHandler);
 

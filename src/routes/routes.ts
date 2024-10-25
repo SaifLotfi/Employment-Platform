@@ -1,5 +1,6 @@
 import express from 'express';
 import {Request, Response} from 'express';
+import { isAuth, isEmployer } from '../middlewares/auth.middleware';
 
 const router = express.Router();
 
@@ -21,6 +22,10 @@ router.get('/employee/login', (_req:Request, res:Response) => {
 
 router.get('/employer/login', (_req:Request, res:Response) => {
   res.render('employer-login', { title: 'login', path: '/login',error:false   });
+});
+
+router.get('/job/post',isAuth,isEmployer, (_req:Request, res:Response) => {
+  res.render('post-jobs', { title: 'Post Jobs', path: '/job/post',error:false   });
 });
 
 router.get('/500', (_req:Request, res:Response) => {
