@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Employee" ALTER COLUMN "bio" DROP NOT NULL,
+ALTER COLUMN "numberOfViews" SET DEFAULT 0;

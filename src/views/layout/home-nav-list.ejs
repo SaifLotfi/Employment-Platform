@@ -3,9 +3,9 @@
     <a href="/" class="nav-link <%= path ==='/' ? 'active': '' %>">Home</a>
   </li>
   <li class="nav-item">
-    <a href="/login" class="nav-link">Login</a>
+    <a href="/login" class="nav-link <%= path ==='/login' ? 'active': '' %>">Login</a>
   </li>
   <li class="nav-item">
-    <a href="/employee/signup" class="nav-link">Signup</a>
+    <a href="/employee/signup" class="nav-link <%= path === '/signup' ? 'active': '' %> ">Signup</a>
   </li>
 </ul>
