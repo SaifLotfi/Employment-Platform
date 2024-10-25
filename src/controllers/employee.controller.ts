@@ -24,7 +24,7 @@ const registerEmployee = async (req: Request, res: Response) => {
 
   const employee = await employeeRepository.createEmployee(req.body);
 
-  const token = signJwt({ empId: employee.empId },'1h');
+  const token = signJwt({ empId: employee.empId,userType:'employee' },'1h');
 
   // Store the JWT in an HTTP-only cookie
   res.cookie('token', token, {
@@ -53,7 +53,7 @@ const loginEmployee = async (req: Request, res: Response) => {
     page: 'employee-login',
   });
 
-  const token = signJwt({ empId: employee.empId },'1h');
+  const token = signJwt({ empId: employee.empId,userType:'employee' },'1h');
 
   // Store the JWT in an HTTP-only cookie
   res.cookie('token', token, {

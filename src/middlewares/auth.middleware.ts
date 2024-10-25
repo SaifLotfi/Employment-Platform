@@ -14,6 +14,7 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
   }
 
   res.locals.empId = decoded.empId;
+  res.locals.userType = decoded.userType;
 
   next();
 };
