@@ -19,6 +19,26 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
+export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  if (!req.cookies.token) {
+    next();
+  }
+
+  let decoded;
+  try {
+    decoded = verifyJWT(req.cookies.token);
+  } catch (err) {
+    next();
+    return;
+  }
+
+  res.locals.empId = decoded.empId;
+
+  res.locals.userType = decoded.userType;
+
+  next();
+}
+
 export const isEmployer = (_req: Request, res: Response, next: NextFunction) => {
   if (res.locals.userType !== 'employer') {
     return res.redirect('/');
