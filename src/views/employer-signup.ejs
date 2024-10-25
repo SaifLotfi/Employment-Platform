@@ -6,7 +6,7 @@
 <%- include('layout/error-alert') %>
 
 <div class="container d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
-    <h1 class="mb-4">Sign Up</h1>
+    <h1 class="mb-4">Employer Sign Up</h1>
     <form class="w-50" action="/employer/signup" method="POST">
       <div class="row">
         <div class="mb-3 col-md-6">
@@ -26,7 +26,7 @@
           <input type="text" class="form-control" id="password" name="company" placeholder="Enter your Company Name" required>
         </div>
       <button type="submit" class="btn btn-primary w-100 mb-3">Sign Up</button>
-      <p>Already have an account? <a href="/login">Login</a></p>
+      <p>Already have an account? <a href="/employer/login">Login</a></p>
     </form>
   </div>
 <%- include('layout/footer') %>
