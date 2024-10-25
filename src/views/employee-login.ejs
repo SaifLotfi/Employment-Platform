@@ -6,8 +6,8 @@
 <%- include('layout/error-alert') %>
 
 <div class="container d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
-    <h1 class="mb-4">Login</h1>
-    <form class="w-50" action="/signup" method="POST">
+    <h1 class="mb-4">Employee Login</h1>
+    <form class="w-50" action="/employee/login" method="POST">
       <div class="row">
         <div class="mb-3 col-md-12">
           <label for="email" class="form-label">Email address</label>
@@ -19,6 +19,7 @@
         </div>
       </div>
       <button type="submit" class="btn btn-primary w-100">Login</button>
+      <p class="mt-3"> <a href="/employer/login">You are an Employer?</a></p>
     </form>
   </div>
 <%- include('layout/footer') %>

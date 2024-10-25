@@ -3,5 +3,6 @@ import { CreateEmployeeDTO } from "../dto/employee.dto";
 
 export type EmployeeDao = {
     createEmployee: (employeeData: CreateEmployeeDTO) => Promise<Employee>;
-    getEmployee: (email: string) => Promise<Employee | null>;
+    getEmployeeByEmail: (email: string) => Promise<Employee | null>;
+    getEmployeeByNationalId: (nationalId: string) => Promise<Employee | null>;
 }

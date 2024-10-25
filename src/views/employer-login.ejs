@@ -1,0 +1,24 @@
+<%- include('layout/header') %>
+</head>
+<%- include('layout/nav-start') %>
+<%- include('layout/home-nav-list') %>
+<%- include('layout/nav-end') %>
+<%- include('layout/error-alert') %>
+
+<div class="container d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
+    <h1 class="mb-4">Employer Login</h1>
+    <form class="w-50" action="/employer/login" method="POST">
+      <div class="row">
+        <div class="mb-3 col-md-12">
+          <label for="email" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+        </div>
+        <div class="mb-3 col-md-12">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+  </div>
+<%- include('layout/footer') %>

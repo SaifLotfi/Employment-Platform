@@ -15,8 +15,12 @@ router.get('/employer/signup', (_req:Request, res:Response) => {
   res.render('employer-signup', { title: 'signup', path: '/signup',error:false   });
 });
 
-router.get('/login', (_req:Request, res:Response) => {
-  res.render('login', { title: 'login', path: '/login',error:false   });
+router.get('/employee/login', (_req:Request, res:Response) => {
+  res.render('employee-login', { title: 'login', path: '/login',error:false   });
+});
+
+router.get('/employer/login', (_req:Request, res:Response) => {
+  res.render('employer-login', { title: 'login', path: '/login',error:false   });
 });
 
 router.get('/500', (_req:Request, res:Response) => {

@@ -20,7 +20,7 @@ const createEmployee = async (
   return employee;
 };
 
-const getEmployee = async (email: string) => {
+const getEmployeeByEmail = async (email: string) => {
   const employee = await prisma.employee.findUnique({
     where: {
       email,
@@ -29,7 +29,17 @@ const getEmployee = async (email: string) => {
   return employee;
 };
 
+const getEmployeeByNationalId = async (nationalId: string) => {
+  const employee = await prisma.employee.findUnique({
+    where: {
+      nationalId,
+    },
+  });
+  return employee;
+};
+
 export const employeeRepository: EmployeeDao = {
   createEmployee,
-  getEmployee
+  getEmployeeByEmail,
+  getEmployeeByNationalId
 }
