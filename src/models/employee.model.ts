@@ -1,4 +1,4 @@
-import { prisma } from "../config/prisma.config";
+import { prisma } from "../libs/prisma.config";
 import { EmployeeDao } from "../types/dao/employee.dao";
 import { CreateEmployeeDTO } from "../types/dto/employee.dto";
 import { hashPassword } from "../utils/hash-password";
