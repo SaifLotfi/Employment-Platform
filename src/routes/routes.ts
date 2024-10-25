@@ -4,26 +4,26 @@ import {Request, Response} from 'express';
 const router = express.Router();
 
 router.get('/', (_req:Request, res:Response) => {
-  res.render('home', { title: 'Home Page', path: '/' });
+  res.render('home', { title: 'Home Page', path: '/'});
 });
 
 router.get('/employee/signup', (_req:Request, res:Response) => {
-  res.render('employee-signup', { title: 'signup', path: '/signup' });
+  res.render('employee-signup', { title: 'signup', path: '/signup',error:false  });
 });
 
 router.get('/employer/signup', (_req:Request, res:Response) => {
-  res.render('employer-signup', { title: 'signup', path: '/signup' });
+  res.render('employer-signup', { title: 'signup', path: '/signup',error:false   });
 });
 
 router.get('/login', (_req:Request, res:Response) => {
-  res.render('login', { title: 'login', path: '/login' });
+  res.render('login', { title: 'login', path: '/login',error:false   });
 });
 
 router.get('/500', (_req:Request, res:Response) => {
-  res.render('500', { title: 'Server Side Error', path: '/500' });
+  res.render('500', { title: 'Server Side Error', path: '/500'});
 });
 
-router.use((_req:Request, res:Response) => {
+router.get('*',(_req:Request, res:Response) => {
   res.render('404', { title: 'Not Found', path: '/400' });
 });
 
