@@ -1,11 +1,16 @@
 import express from 'express';
 import {Request, Response} from 'express';
-import { isAuth, isEmployer } from '../middlewares/auth.middleware';
+import { authMiddleware, isAuth, isEmployer } from '../middlewares/auth.middleware';
 
 const router = express.Router();
 
-router.get('/', (_req:Request, res:Response) => {
-  res.render('home', { title: 'Home Page', path: '/'});
+router.get('/',authMiddleware,(_req:Request, res:Response) => {
+  res.render('home', { title: 'Home Page', path: '/', userType:res.locals.userType });
+});
+
+router.get('/logout', (_req, res) => {
+  res.clearCookie('token');
+  res.redirect('/');
 });
 
 router.get('/employee/signup', (_req:Request, res:Response) => {
