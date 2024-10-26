@@ -37,14 +37,9 @@ const getEmployeeByNationalId = async (nationalId: string) => {
   return employee;
 };
 
-const getAllEmployees = async (skip: number, take: number, query: string) => {
+const getAllEmployees = async (skip: number, take: number, filters: any) => {
   const employees = await prisma.employee.findMany({
-    where: {
-      OR: [
-        { name: { contains: query, mode: 'insensitive' } },
-        { title: { contains: query, mode: 'insensitive' } },
-      ],
-    },
+    where:filters,
     take,
     skip,
   });

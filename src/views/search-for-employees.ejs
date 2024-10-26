@@ -11,6 +11,61 @@
     <button class="btn btn-outline-success" type="submit">Search</button>
   </form>
 
+  <!-- Filter Button and Modal Trigger -->
+  <div class="d-flex justify-content-end mb-4">
+    <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#filterModal">Filter By</button>
+  </div>
+
+  <!-- Filter Modal -->
+  <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="filterModalLabel">Filter Employees</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="GET" action="/employee/search">
+
+          <!-- Pass the search query in the filter form -->
+          <input type="hidden" name="query" value="<%= query || '' %>">
+
+            <!-- City Filter -->
+            <div class="mb-3">
+              <label for="city" class="form-label">City</label>
+              <input type="text" class="form-control" id="city" name="city" placeholder="Enter city name">
+            </div>
+
+            <!-- Experience Level Filter -->
+            <div class="mb-3">
+              <label for="expLevel" class="form-label">Experience Level</label>
+              <select class="form-select" id="expLevel" name="expLevel">
+                <option value="" selected>Choose Experience Level...</option>
+                <option value="Intern">Intern</option>
+                <option value="Junior">Junior</option>
+                <option value="MidLevel">MidLevel</option>
+                <option value="Senior">Senior</option>
+                <option value="Lead">Lead</option>
+                <option value="Architect">Architect</option>
+              </select>
+            </div>
+
+            <!-- Programming Language Filter -->
+            <!--<div class="mb-3">-->
+            <!--  <label for="programmingLanguages" class="form-label">Programming Languages</label>-->
+            <!--  <input type="text" class="form-control" id="programmingLanguages" name="programmingLanguages" placeholder="e.g., JavaScript, Python">-->
+            <!--</div>-->
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Apply Filters</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="row row-cols-1 row-cols-md-2 g-4">
     <% employees.forEach((employee) => { %>
       <div class="col text-center mb-4">
@@ -49,4 +104,5 @@
     </nav>
   </div>
 </div>
+
 <%- include('layout/footer') %>
