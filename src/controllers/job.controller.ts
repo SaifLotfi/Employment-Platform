@@ -36,7 +36,25 @@ const getPostedJobs = async (req: Request, res: Response, _next: NextFunction) =
   });
 };
 
+const getJobById = async (req: Request, res: Response, _next: NextFunction) => {
+  const job = await jobRepository.getJobById(req.params.id);
+
+  if (!job) {
+    res.render('404', {
+      title: 'Not Found',
+      path: '/400',
+    })
+  }
+
+  res.render('view-job', {
+    title: 'Job Details',
+    path: '/job/:id',
+    job,
+  });
+};
+
 export const jobController = {
   postJob,
   getPostedJobs,
+  getJobById,
 };

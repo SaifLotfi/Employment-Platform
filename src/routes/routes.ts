@@ -44,6 +44,8 @@ router.get('/job/posted', jobController.getPostedJobs);
 
 router.get('/employee/search',employeeController.getAllEmployees);
 
+router.get('/job/:id',jobController.getJobById);
+
 router.get('/500',authMiddleware, (_req:Request, res:Response) => {
   res.render('500', { title: 'Server Side Error', path: '/500'});
 });

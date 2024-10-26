@@ -40,8 +40,18 @@ const getNumberOfJobs = async (empId: string) => {
   return numberOfJobs;
 }
 
+const getJobById = async (jobId: string) => {
+  const job = await prisma.job.findUnique({
+    where: {
+      jobId,
+    },
+  });
+  return job;
+};
+
 export const jobRepository:JobDao = {
   createJob,
   getJobs,
-  getNumberOfJobs
+  getNumberOfJobs,
+  getJobById
 };
