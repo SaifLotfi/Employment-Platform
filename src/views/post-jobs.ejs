@@ -1,0 +1,42 @@
+<%- include('layout/header') %>
+</head>
+<%- include('layout/nav-start') %>
+<%- include('layout/employer-nav-list') %>
+<%- include('layout/nav-end') %>
+
+<div class="container d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
+    <h1 class="mb-4">Post a Job!</h1>
+    <form class="w-50" action="/job" method="POST">
+      <div class="row">
+        <div class="mb-3 col-md-6">
+          <label for="title" class="form-label">title</label>
+          <input type="text" class="form-control" id="title" name="title" placeholder="Enter job title" required>
+        </div>
+        <div class="mb-3 col-md-6">
+          <label for="salary" class="form-label">salary</label>
+          <div class="input-group mb-3">
+            <span class="input-group-text">$</span>
+            <input type="number" class="form-control" id="salary" name="salary" placeholder="Enter job salary" required>
+          </div>
+        </div>
+        <div class="mb-3 col-md-12">
+          <label for="description" class="form-label">description</label>
+          <textarea class="form-control" id="description" name="description" placeholder="Enter job description" required></textarea>
+        </div>
+        <div class="input-group mb-3 col-md-6">
+          <select name="expLevel" class="form-select" id="inputGroupSelect02">
+            <option selected>Choose Your Experience Level...</option>
+            <option value="Intern">Intern</option>
+            <option value="Junior">Junior</option>
+            <option value="MidLevel">MidLevel</option>
+            <option value="Senior">Senior</option>
+            <option value="Lead">Lead</option>
+            <option value="Architect">Architect</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary w-100 mb-3">Post</button>
+    </form>
+  </div>
+
+  <%- include('layout/footer') %>

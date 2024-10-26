@@ -1,7 +1,15 @@
 <%- include('layout/header') %>
 </head>
 <%- include('layout/nav-start') %>
-<%- include('layout/home-nav-list') %>
+
+<% if(userType === 'employer'){ %>
+  <%- include('layout/employer-nav-list') %>
+<% } else if(userType === 'employee'){ %>
+  <%- include('layout/employee-nav-list') %>
+<% } else{ %>
+  <%- include('layout/home-nav-list') %>
+<% } %>
+
 <%- include('layout/nav-end') %>
 <div class="container d-flex flex-column justify-content-center align-items-center" style="height: 100vh">
   <div class="row">

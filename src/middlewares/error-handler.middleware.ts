@@ -6,6 +6,8 @@ const globalErrorHandler = (err: AppError, req: Request, res: Response, next: Ne
   // Set default values for statusCode and message
   err.statusCode = err.statusCode || 500;
 
+  console.error(err);
+
   if (err.pageInfo) {
     res.render(err.pageInfo.page, {
       errorMessage: err.message,
