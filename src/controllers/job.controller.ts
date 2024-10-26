@@ -43,13 +43,22 @@ const getJobById = async (req: Request, res: Response, _next: NextFunction) => {
     res.render('404', {
       title: 'Not Found',
       path: '/400',
-    })
+    });
+    return;
+  }
+
+  if( res.locals.userType === 'employer' && job.empId !== res.locals.empId) {
+    res.render('404', {
+      title: 'Not Found',
+      path: '/400',
+    });
   }
 
   res.render('view-job', {
     title: 'Job Details',
     path: '/job/:id',
     job,
+    userType:res.locals.userType
   });
 };
 

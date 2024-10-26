@@ -22,13 +22,13 @@ app.set('view engine', 'ejs');
 
 app.set('views', 'src/views');
 
-app.use(viewsRouter);
-
 app.use(employeeRouter);
 
 app.use(employerRouter);
 
 app.use(jobRouter);
+
+app.use(viewsRouter);
 
 app.use(globalErrorHandler);
 
