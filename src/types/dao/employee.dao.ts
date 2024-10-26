@@ -5,4 +5,6 @@ export type EmployeeDao = {
     createEmployee: (employeeData: CreateEmployeeDTO) => Promise<Employee>;
     getEmployeeByEmail: (email: string) => Promise<Employee | null>;
     getEmployeeByNationalId: (nationalId: string) => Promise<Employee | null>;
+    getAllEmployees: (skip:number, take: number) => Promise<Employee[]>;
+    getNumberOfEmployees: () => Promise<number>;
 }

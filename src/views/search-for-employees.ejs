@@ -1,0 +1,50 @@
+<%- include('layout/header') %>
+</head>
+<%- include('layout/nav-start') %>
+<%- include('layout/employer-nav-list') %>
+<%- include('layout/nav-end') %>
+<div class="container" style="margin-top: 10rem">
+  <h2 class="text-center mb-4">Search For Employees</h2>
+  <form class="d-flex mb-4">
+    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+  </form>
+  <div class="row row-cols-1 row-cols-md-2 g-4">
+    <% employees.forEach((employee) => { %>
+      <div class="col text-center mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title"><%= employee.name %></h5>
+            <!--<p class="card-text"><%= employee.title %></p>-->
+            <p class="card-text"><strong>Experience Level:</strong> <%= employee.expLevel %></p>
+          </div>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div class="d-flex justify-content-center mt-4">
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
+        <!-- Previous Page Button -->
+        <li class="page-item <%= currentPage == 1 ? 'disabled' : '' %>">
+          <a class="page-link" href="?page=<%= parseInt(currentPage) - 1 %>">Previous</a>
+        </li>
+
+        <!-- Page Number Buttons -->
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+            <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+          </li>
+        <% } %>
+
+        <!-- Next Page Button -->
+        <li class="page-item <%= currentPage == totalPages ? 'disabled' : '' %>">
+          <a class="page-link" href="?page=<%= parseInt(currentPage) + 1 %>">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<%- include('layout/footer') %>
