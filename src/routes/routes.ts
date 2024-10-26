@@ -2,6 +2,7 @@ import express from 'express';
 import {Request, Response} from 'express';
 import { authMiddleware, isAuth, isEmployer } from '../middlewares/auth.middleware';
 import { jobController } from '../controllers/job.controller';
+import { employeeController } from '../controllers/employee.controller';
 
 const router = express.Router();
 
@@ -40,6 +41,8 @@ router.get('/job/post',isAuth,isEmployer, (_req:Request, res:Response) => {
 });
 
 router.get('/job/posted', jobController.getPostedJobs);
+
+router.get('/employee/search',employeeController.getAllEmployees);
 
 router.get('/500',authMiddleware, (_req:Request, res:Response) => {
   res.render('500', { title: 'Server Side Error', path: '/500'});

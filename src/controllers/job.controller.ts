@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import { jobRepository } from '../models/job.model';
 
-const PAGE_SIZE = 6;
+import { NUMBER_OF_CARDS_PER_PAGE } from '../utils/constants';
 
 const postJob = async (req: Request, res: Response, _next: NextFunction) => {
   await jobRepository.createJob({
@@ -21,11 +21,11 @@ const getPostedJobs = async (req: Request, res: Response, _next: NextFunction) =
 
   const jobs = await jobRepository.getJobs(
     res.locals.empId,
-    PAGE_SIZE * (Number(page) - 1),
-    PAGE_SIZE
+    NUMBER_OF_CARDS_PER_PAGE * (Number(page) - 1),
+    NUMBER_OF_CARDS_PER_PAGE
   );
 
-  const totalPages = Math.ceil(numberOfJobs / PAGE_SIZE);
+  const totalPages = Math.ceil(numberOfJobs / NUMBER_OF_CARDS_PER_PAGE);
 
   res.render('posted-jobs', {
     title: 'Posted Jobs',
