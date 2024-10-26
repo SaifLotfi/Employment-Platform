@@ -1,0 +1,110 @@
+<%- include('layout/header') %>
+</head>
+<%- include('layout/nav-start') %>
+<%- include('layout/employee-nav-list') %>
+<%- include('layout/nav-end') %>
+
+<div class="container" style="margin-top: 10rem">
+  <h2 class="text-center mb-4">Search For Jobs</h2>
+
+  <form class="d-flex mb-4" method="GET" action="/job/search">
+    <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+  </form>
+
+  <!-- Filter Button and Modal Trigger -->
+  <div class="d-flex justify-content-end mb-4">
+    <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#filterModal">Filter By</button>
+  </div>
+
+  <!-- Filter Modal -->
+  <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="filterModalLabel">Filter Jobs</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="GET" action="/job/search">
+
+          <!-- Pass the search query in the filter form -->
+          <input type="hidden" name="query" value="<%= query || '' %>">
+
+            <!-- City Filter -->
+            <!--<div class="mb-3">-->
+            <!--  <label for="city" class="form-label">City</label>-->
+            <!--  <input type="text" class="form-control" id="city" name="city" placeholder="Enter city name">-->
+            <!--</div>-->
+
+            <!-- Experience Level Filter -->
+            <div class="mb-3">
+              <label for="expLevel" class="form-label">Experience Level</label>
+              <select class="form-select" id="expLevel" name="expLevel">
+                <option value="" selected>Choose Experience Level...</option>
+                <option value="Intern">Intern</option>
+                <option value="Junior">Junior</option>
+                <option value="MidLevel">MidLevel</option>
+                <option value="Senior">Senior</option>
+                <option value="Lead">Lead</option>
+                <option value="Architect">Architect</option>
+              </select>
+            </div>
+
+            <!-- Programming Language Filter -->
+            <!--<div class="mb-3">-->
+            <!--  <label for="programmingLanguages" class="form-label">Programming Languages</label>-->
+            <!--  <input type="text" class="form-control" id="programmingLanguages" name="programmingLanguages" placeholder="e.g., JavaScript, Python">-->
+            <!--</div>-->
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Apply Filters</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-2 g-4">
+    <% jobs.forEach((job) => { %>
+      <div class="col text-center mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title"><%= job.title %></h5>
+            <p class="card-text"><strong>Experience Level:</strong> <%= job.expLevel %></p>
+            <p class="card-text"><strong>Salary</strong>$ <%= job.salary %></p>
+            <a href="/job/<%= job.jobId %>" class="btn btn-outline-primary">View Job</a>
+          </div>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div class="d-flex justify-content-center mt-4">
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
+        <!-- Previous Page Button -->
+        <li class="page-item <%= currentPage == 1 ? 'disabled' : '' %>">
+          <a class="page-link" href="?query=<%= query %>&page=<%= parseInt(currentPage) - 1 %>">Previous</a>
+        </li>
+
+        <!-- Page Number Buttons -->
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+            <a class="page-link" href="?query=<%= query %>&page=<%= i %>"><%= i %></a>
+          </li>
+        <% } %>
+
+        <!-- Next Page Button -->
+        <li class="page-item <%= currentPage == totalPages || totalPages == 0 ? 'disabled' : '' %>">
+          <a class="page-link" href="?query=<%= query %>&page=<%= parseInt(currentPage) + 1 %>">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<%- include('layout/footer') %>

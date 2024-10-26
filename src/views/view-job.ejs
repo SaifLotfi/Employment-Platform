@@ -1,0 +1,38 @@
+<%- include('layout/header') %>
+</head>
+<%- include('layout/nav-start') %>
+<% if(userType === 'employee') { %>
+  <%- include('layout/employee-nav-list') %>
+<% } else{ %>
+  <%- include('layout/employer-nav-list') %>
+<% } %>
+<%- include('layout/nav-end') %>
+
+<div class="container"  style="margin-top: 5rem;">
+  <h2 class="text-center mb-4"><%= job.title %></h2>
+  
+  <div class="card text-center mb-4">
+    <div class="card-body">
+      <!-- Job Information -->
+      <p><strong>Title:</strong> <%= job.title %></p>
+      <!--<p><strong>Company:</strong> <%= job.company %></p>-->
+      <p><strong>Experience Level:</strong> <%= job.expLevel %></p>
+      <p><strong>Salary:</strong> $<%= job.salary %></p>
+
+      <!-- Job Description -->
+      <h5>Description</h5>
+      <p><%= job.description %></p>
+
+      <% if(userType === 'employee') { %>
+        <a href="/job/<%= job.jobId %>/apply" class="btn btn-primary">Apply</a>
+      <% } else{ %>
+
+      <% } %>
+
+
+    </div>
+  </div>
+</div>
+
+<%- include('layout/footer') %>
+

@@ -40,16 +40,20 @@ router.get('/job/post',isAuth,isEmployer, (_req:Request, res:Response) => {
   res.render('post-jobs', { title: 'Post Jobs', path: '/job/post',error:false   });
 });
 
-router.get('/job/posted', jobController.getPostedJobs);
+router.get('/job/posted',isAuth,isEmployer,  jobController.getPostedJobs);
 
-router.get('/employee/search',employeeController.getAllEmployees);
+router.get('/employee/search',isAuth,isEmployer,employeeController.getAllEmployees);
+
+router.get('/job/search',isAuth,jobController.getAllJobs);
+
+router.get('/job/:id',isAuth,jobController.getJobById);
 
 router.get('/500',authMiddleware, (_req:Request, res:Response) => {
-  res.render('500', { title: 'Server Side Error', path: '/500'});
+  res.render('500', { title: 'Server Side Error', path: '/500', userType:res.locals.userType });
 });
 
 router.get('*',authMiddleware,(_req:Request, res:Response) => {
-  res.render('404', { title: 'Not Found', path: '/400' });
+  res.render('404', { title: 'Not Found', path: '/404', userType:res.locals.userType  });
 });
 
 export default router;

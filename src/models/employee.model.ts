@@ -46,14 +46,9 @@ const getAllEmployees = async (skip: number, take: number, filters: any) => {
   return employees;
 };
 
-const getNumberOfEmployees = async (query: string) => {
+const getNumberOfEmployees = async (filters: any) => {
   const numberOfEmployees = await prisma.employee.count({
-    where: {
-      OR: [
-        { name: { contains: query, mode: 'insensitive' } },
-        { title: { contains: query, mode: 'insensitive' } },
-      ],
-    },
+    where:filters ,
   });
   return numberOfEmployees;
 };

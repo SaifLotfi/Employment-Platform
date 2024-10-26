@@ -1,6 +1,6 @@
 <ul class="navbar-nav ms-auto">
   <li class="nav-item">
-    <a href="/job/posted" class="nav-link <%= path ==='/job/posted' ? 'active': '' %>">Posted Jobs</a>
+    <a href="/job/posted" class="nav-link <%= path ==='/job/posted' || path ==='/job/:id' ? 'active': '' %>">Posted Jobs</a>
   </li>
   <li class="nav-item">
     <a href="/job/post" class="nav-link <%= path ==='/job/post' ? 'active': '' %>">Post Jobs</a>

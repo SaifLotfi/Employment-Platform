@@ -1,9 +1,12 @@
 <ul class="navbar-nav ms-auto">
   <li class="nav-item">
-    <a href="/" class="nav-link <%= path ==='/' ? 'active': '' %>">Home</a>
+    <a href="/job/suggested" class="nav-link <%= path ==='/job/suggested' ? 'active': '' %>">Suggested Jobs</a>
   </li>
   <li class="nav-item">
-    <a href="/job/search" class="nav-link <%= path ==='/login' ? 'active': '' %>">Search Jobs</a>
+    <a href="/job/search" class="nav-link <%= path ==='/job/search' || path ==='/job/:id'  ? 'active': '' %>">Search For Jobs</a>
+  </li>
+  <li class="nav-item">
+    <a href="/employee/profile" class="nav-link <%= path ==='/employee/profile' ? 'active': '' %>">Profile</a>
   </li>
   <li class="nav-item">
     <a href="/logout" class="nav-link <%= path === '/signup' ? 'active': '' %> ">Logout</a>
