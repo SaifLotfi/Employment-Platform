@@ -1,11 +1,11 @@
 <ul class="navbar-nav ms-auto">
   <li class="nav-item">
-    <a href="/" class="nav-link <%= path ==='/' ? 'active': '' %>">Posted Jobs</a>
+    <a href="/job/posted" class="nav-link <%= path ==='/job/posted' ? 'active': '' %>">Posted Jobs</a>
   </li>
   <li class="nav-item">
-    <a href="/job/post" class="nav-link <%= path ==='/login' ? 'active': '' %>">Post Jobs</a>
+    <a href="/job/post" class="nav-link <%= path ==='/job/post' ? 'active': '' %>">Post Jobs</a>
   </li>
   <li class="nav-item">
-    <a href="/logout" class="nav-link <%= path === '/signup' ? 'active': '' %> ">Logout</a>
+    <a href="/logout" class="nav-link">Logout</a>
   </li>
 </ul>
