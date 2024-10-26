@@ -73,11 +73,14 @@ const loginEmployee = async (req: Request, res: Response) => {
 const getAllEmployees = async (req: Request, res: Response) => {
   const { page = 1 } = req.query;
 
-  const numberOfEmployees = await employeeRepository.getNumberOfEmployees();
+  const query = req.query.query as string;
+
+  const numberOfEmployees = await employeeRepository.getNumberOfEmployees(query);
 
   const employees = await employeeRepository.getAllEmployees(
     NUMBER_OF_CARDS_PER_PAGE * (Number(page) - 1),
-    NUMBER_OF_CARDS_PER_PAGE
+    NUMBER_OF_CARDS_PER_PAGE,
+    query
   );
 
   const totalPages = Math.ceil(numberOfEmployees / NUMBER_OF_CARDS_PER_PAGE);
@@ -88,6 +91,7 @@ const getAllEmployees = async (req: Request, res: Response) => {
     employees,
     currentPage: page,
     totalPages,
+    query
   });
 };
 
