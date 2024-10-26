@@ -1,4 +1,4 @@
-export const getFilterObject = (reqQueryObject: any) => {
+export const getEmployeeFilterObject = (reqQueryObject: any) => {
   const query = (reqQueryObject.query as string) || '';
   const city = reqQueryObject.city as string;
   const expLevel = reqQueryObject.expLevel as string;
@@ -23,5 +23,30 @@ export const getFilterObject = (reqQueryObject: any) => {
   //  filters.AND.push({ programmingLanguages: { hasSome: programmingLanguages } });
   //
 
+  return filters;
+};
+
+export const getJobFilterObject = (reqQueryObject: any) => {
+  const query = (reqQueryObject.query as string) || '';
+  const expLevel = reqQueryObject.expLevel as string;
+  //const programmingLanguages = (reqQueryObject.programmingLanguages as string)
+  //  ?.split(',')
+  //  .map(lang => lang.trim());
+
+  const filters: {[key: string]: any}= {
+    AND: [
+      {
+        OR: [
+          { description: { contains: query, mode: 'insensitive' } },
+          { title: { contains: query, mode: 'insensitive' } },
+        ],
+      },
+    ],
+  };
+
+  if (expLevel) filters.AND.push({ expLevel: { equals: expLevel } });
+  //if (programmingLanguages?.length)
+  //  filters.AND.push({ programmingLanguages: { hasSome: programmingLanguages } });
+  //
   return filters;
 };

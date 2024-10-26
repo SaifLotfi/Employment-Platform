@@ -5,7 +5,7 @@ import { AppError } from '../utils/app-error';
 import { NUMBER_OF_CARDS_PER_PAGE } from '../utils/constants';
 import { isPasswordMatch } from '../utils/hash-password';
 import { signJwt } from '../utils/jwt';
-import { getFilterObject } from '../utils/get-filter-object';
+import { getEmployeeFilterObject } from '../utils/get-filter-object';
 
 const registerEmployee = async (req: Request, res: Response) => {
   const existingEmail = await employeeRepository.getEmployeeByEmail(req.body.email);
@@ -76,9 +76,9 @@ const getAllEmployees = async (req: Request, res: Response) => {
 
   const query = req.query.query as string;
 
-  const numberOfEmployees = await employeeRepository.getNumberOfEmployees(query);
+  const filters = getEmployeeFilterObject(req.query);
 
-  const filters = getFilterObject(req.query);
+  const numberOfEmployees = await employeeRepository.getNumberOfEmployees(filters);
 
   const employees = await employeeRepository.getAllEmployees(
     NUMBER_OF_CARDS_PER_PAGE * (Number(page) - 1),
