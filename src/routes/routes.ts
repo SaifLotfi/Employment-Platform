@@ -1,6 +1,6 @@
 import express from 'express';
 import {Request, Response} from 'express';
-import { authMiddleware, isAuth, isEmployer } from '../middlewares/auth.middleware';
+import { authMiddleware, isAuth, isEmployee, isEmployer } from '../middlewares/auth.middleware';
 import { jobController } from '../controllers/job.controller';
 import { employeeController } from '../controllers/employee.controller';
 
@@ -44,7 +44,9 @@ router.get('/job/posted',isAuth,isEmployer,  jobController.getPostedJobs);
 
 router.get('/employee/search',isAuth,isEmployer,employeeController.getAllEmployees);
 
-router.get('/job/search',isAuth,jobController.getAllJobs);
+router.get('/job/search',isAuth,isEmployee,jobController.getAllJobs);
+
+router.get('/job/suggested',isAuth,jobController.getSuggestedJobs);
 
 router.get('/job/:id',isAuth,jobController.getJobById);
 
