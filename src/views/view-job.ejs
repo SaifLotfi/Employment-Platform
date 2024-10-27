@@ -3,15 +3,14 @@
 <%- include('layout/nav-start') %>
 <% if(userType === 'employee') { %>
   <%- include('layout/employee-nav-list') %>
-<% } else{ %>
+<% } else { %>
   <%- include('layout/employer-nav-list') %>
 <% } %>
 <%- include('layout/nav-end') %>
 
-<div class="container"  style="margin-top: 5rem;">
+<div class="container d-flex flex-column justify-content-center align-items-center min-vh-100">
   <h2 class="text-center mb-4"><%= job.title %></h2>
-  
-  <div class="card text-center mb-4">
+  <div class="card w-75 text-center mb-4">
     <div class="card-body">
       <!-- Job Information -->
       <p><strong>Title:</strong> <%= job.title %></p>
@@ -20,50 +19,71 @@
       <p><strong>Salary:</strong> $<%= job.salary %></p>
 
       <!-- Job Description -->
-      <h5>Description</h5>
+      <h5><strong>Description</strong></h5>
       <p><%= job.description %></p>
 
       <% if(userType === 'employee') { %>
         <% const application = job.employees.find(app => app.empId === empId);
-            if(application){
+            if(application) {
         %>
-          <%if(application.status === 'pending'){%>
+          <% if(application.status === 'pending') { %>
             <p class="text-primary">Pending</p>
-          <%} else if(application.status === 'rejected'){%>
+          <% } else if(application.status === 'rejected') { %>
             <p class="text-danger">Rejected</p>
-          <% } else{ %>
+          <% } else { %>
             <p class="text-success">Accepted</p>
           <% } %>
-        <% } else{ %>
+        <% } else { %>
           <form action="/job/<%= job.jobId %>/apply" method="POST" style="display:inline;">
             <button type="submit" class="btn btn-success">Apply</button>
           </form>
         <% } %>
-      <% } else{ %>
+      <% } else { %>
         <% if(job.employees.length) { %>
           <h5>Employees Applications</h5>
           <div class="container">
             <% job.employees.forEach(emp => { %>
-              <div class="d-flex align-items-center justify-content-between border rounded p-3 mb-3">
-                <!-- Employee Name on the Left -->
-                <p class="mb-0"><%= emp.employee.name %></p>
+              <div class="row border rounded p-3 mb-3 align-items-center text-center">
+                <!-- Employee Name Column -->
+                <div class="col-3">
+                  <p class="mb-0"><%= emp.employee.name %></p>
+                </div>
 
-                <p class="mb-0"><%= emp.employee.title %></p>
+                <!-- Employee Title Column -->
+                <div class="col-3">
+                  <p class="mb-0"><%= emp.employee.title %></p>
+                </div>
 
-                <!-- Center Button for Viewing Profile -->
-                <a href="/employee/<%= emp.employee.empId %>" class="btn btn-primary btn-sm">Show Profile</a>
+                <!-- View Profile Button Column -->
+                <div class="col-3">
+                  <a href="/employee/<%= emp.employee.empId %>" class="btn btn-primary btn-sm">Show Profile</a>
+                </div>
 
-                <!-- Accept and Reject Buttons on the Right -->
-                <div>
-                  <button class="btn btn-success btn-sm me-2" , 'accepted')">Accept</button>
-                  <button class="btn btn-danger btn-sm" , 'rejected')">Reject</button>
+                <!-- Status or Action Buttons Column -->
+                <div class="col-3">
+                  <% if(emp.status === 'pending') { %>
+                    <div class="d-flex justify-content-center gap-2">
+                      <form method="POST" action="/job/<%= job.jobId %>/accept">
+                        <input type="hidden" name="empId" value="<%= emp.employee.empId %>">
+                        <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                      </form>
+                      <form method="POST" action="/job/<%= job.jobId %>/reject">
+                        <input type="hidden" name="empId" value="<%= emp.employee.empId %>">
+                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                      </form>
+                    </div>
+                  <% } else if(emp.status === 'rejected') { %>
+                    <p class="text-danger mb-0">Rejected</p>
+                  <% } else { %>
+                    <p class="text-success mb-0">Accepted</p>
+                  <% } %>
                 </div>
               </div>
             <% }) %>
-            <% } else{ %>
-              <h5>No Applications Yet</h5>
-            <% } %>
           </div>
+        <% } else { %>
+          <h5>No Applications Yet</h5>
+        <% } %>
       <% } %>
     </div>
   </div>

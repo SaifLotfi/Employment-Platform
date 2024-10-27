@@ -96,6 +96,20 @@ const applyForAJob = async (jobId: string, empId: string) => {
   });
 };
 
+const changeJobApplicationStatus = async (jobId: string, empId: string, status: 'accepted' | 'rejected') => {
+  await prisma.employeeJob.update({
+    where: {
+      empId_jobId: {
+        empId,
+        jobId,
+      },
+    },
+    data: {
+      status,
+    },
+  });
+};
+
 export const jobRepository: JobDao = {
   createJob,
   getPostedJobs,
@@ -104,4 +118,5 @@ export const jobRepository: JobDao = {
   getNumberOfAllJobs,
   getJobById,
   applyForAJob,
+  changeJobApplicationStatus
 };

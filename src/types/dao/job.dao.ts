@@ -9,4 +9,5 @@ export type JobDao = {
   getNumberOfAllJobs: (filters:any) => Promise<number>;
   getJobById: (jobId: string) => Promise<Job | null>;
   applyForAJob: (jobId: string, empId: string) => Promise<void>;
+  changeJobApplicationStatus: (jobId: string, empId: string, status: 'accepted' | 'rejected') => Promise<void>;
 }
