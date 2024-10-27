@@ -1,0 +1,68 @@
+
+<%- include('layout/header') %>
+</head>
+<%- include('layout/nav-start') %>
+<%if(userType === 'employee'){%>
+  <%- include('layout/employee-nav-list') %>
+<%}else if(userType === 'employer'){%>
+  <%- include('layout/employer-nav-list') %>
+<%}%>
+<%- include('layout/nav-end') %>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card w-75">
+    <div class="card-body">
+
+      <div class="profile-section text-center mb-4">
+        <h2><%= employee.name %></h2>
+        <p><strong>Title:</strong> <%= employee.title %></p>
+        <p><strong>City:</strong> <%= employee.city %></p>
+        <p><strong>Experience Level:</strong> <%= employee.expLevel %></p>
+        <p><strong>Bio:</strong> <%= employee.bio || 'No bio available' %></p>
+        <%if(userType === 'employee'){%>
+          <p><strong>Number of Views:</strong> <%= employee.numberOfViews %></p>
+        <%}%>
+      </div>
+
+
+      <%if (userType === 'employee') {%>
+
+      <hr>
+
+        <div class="jobs-section text-center">
+          <h3>My Applications</h3>
+          <% if (employee.jobs.length > 0) { %>
+            <div class="container">
+              <% employee.jobs.forEach(job => { %>
+                <div class="d-flex align-items-center justify-content-between border rounded p-3 mb-3">
+                  <!-- Employee Name on the Left, with flex-grow to take remaining space -->
+                  <p class="mb-0 flex-grow-1 text-start"><%= job.job.title %></p>
+
+                  <!-- Center Button for Viewing Profile -->
+                  <a href="/job/<%= job.job.jobId %>" class="btn btn-primary btn-sm mx-3">View Job</a>
+
+                  <!-- Accept and Reject Status on the Right -->
+                  <div class="text-end">
+                    <% if(job.status === 'pending'){ %>
+                      <p class="text-primary mb-0">Pending</p>
+                    <% } else if(job.status === 'rejected'){ %>
+                      <p class="text-danger mb-0">Rejected</p>
+                    <% } else { %>
+                      <p class="text-success mb-0">Accepted</p>
+                    <% } %>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <p>No applications found.</p>
+          <% } %>
+        </div>
+      <%}%>
+
+    </div>
+  </div>
+</div>
+
+<%- include('layout/footer') %>
+

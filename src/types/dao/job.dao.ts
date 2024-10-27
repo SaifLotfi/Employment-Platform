@@ -8,4 +8,5 @@ export type JobDao = {
   getNumberOfPostedJobs: (empId: string) => Promise<number>;
   getNumberOfAllJobs: (filters:any) => Promise<number>;
   getJobById: (jobId: string) => Promise<Job | null>;
+  applyForAJob: (jobId: string, empId: string) => Promise<void>;
 }

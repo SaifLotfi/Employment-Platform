@@ -7,4 +7,5 @@ export type EmployeeDao = {
     getEmployeeByNationalId: (nationalId: string) => Promise<Employee | null>;
     getAllEmployees: (skip:number, take: number, filters:any) => Promise<Employee[]>;
     getNumberOfEmployees: (filters:any) => Promise<number>;
+    getEmployeeById: (empId: string) => Promise<Employee | null>;
 }

@@ -24,12 +24,47 @@
       <p><%= job.description %></p>
 
       <% if(userType === 'employee') { %>
-        <a href="/job/<%= job.jobId %>/apply" class="btn btn-primary">Apply</a>
+        <% const application = job.employees.find(app => app.empId === empId);
+            if(application){
+        %>
+          <%if(application.status === 'pending'){%>
+            <p class="text-primary">Pending</p>
+          <%} else if(application.status === 'rejected'){%>
+            <p class="text-danger">Rejected</p>
+          <% } else{ %>
+            <p class="text-success">Accepted</p>
+          <% } %>
+        <% } else{ %>
+          <form action="/job/<%= job.jobId %>/apply" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-success">Apply</button>
+          </form>
+        <% } %>
       <% } else{ %>
+        <% if(job.employees.length) { %>
+          <h5>Employees Applications</h5>
+          <div class="container">
+            <% job.employees.forEach(emp => { %>
+              <div class="d-flex align-items-center justify-content-between border rounded p-3 mb-3">
+                <!-- Employee Name on the Left -->
+                <p class="mb-0"><%= emp.employee.name %></p>
 
+                <p class="mb-0"><%= emp.employee.title %></p>
+
+                <!-- Center Button for Viewing Profile -->
+                <a href="/employee/<%= emp.employee.empId %>" class="btn btn-primary btn-sm">Show Profile</a>
+
+                <!-- Accept and Reject Buttons on the Right -->
+                <div>
+                  <button class="btn btn-success btn-sm me-2" , 'accepted')">Accept</button>
+                  <button class="btn btn-danger btn-sm" , 'rejected')">Reject</button>
+                </div>
+              </div>
+            <% }) %>
+            <% } else{ %>
+              <h5>No Applications Yet</h5>
+            <% } %>
+          </div>
       <% } %>
-
-
     </div>
   </div>
 </div>

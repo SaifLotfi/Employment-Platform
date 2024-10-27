@@ -72,6 +72,8 @@ model EmployeeJob {
   jobId String
   job   Job    @relation(fields: [jobId], references: [jobId])
 
+  status ApplicationStatus @default(pending)
+
   @@id([empId, jobId])
 }
 
@@ -102,4 +104,10 @@ enum ExpLevel {
   Senior
   Lead
   Architect
+}
+
+enum ApplicationStatus {
+  pending
+  accepted
+  rejected
 }
