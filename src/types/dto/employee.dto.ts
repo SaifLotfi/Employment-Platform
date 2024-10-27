@@ -8,4 +8,5 @@ export type CreateEmployeeDTO = {
   city: string;
   expLevel: ExpLevel;
   title: string;
+  bio: string;
 };

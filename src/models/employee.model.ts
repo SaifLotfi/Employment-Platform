@@ -4,7 +4,7 @@ import { CreateEmployeeDTO } from '../types/dto/employee.dto';
 import { hashPassword } from '../utils/hash-password';
 
 const createEmployee = async (employeeData: CreateEmployeeDTO) => {
-  const { name, email, password, nationalId, city, expLevel, title } = employeeData;
+  const { name, email, password, nationalId, city, expLevel, title ,bio} = employeeData;
   const employee = await prisma.employee.create({
     data: {
       name,
@@ -14,6 +14,7 @@ const createEmployee = async (employeeData: CreateEmployeeDTO) => {
       city,
       expLevel,
       title,
+      bio
     },
   });
   return employee;
