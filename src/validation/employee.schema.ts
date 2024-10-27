@@ -11,7 +11,7 @@ export const employeeSchema = z.object({
     .string()
     .transform(val => Number(val))
     .refine(val => !isNaN(val) && (String(val).startsWith('2') || String(val).startsWith('3')), {
-      message: 'Salary must be a positive number',
+      message: 'Invalid Id',
     }),
   city: z.string().min(1, 'City cannot be empty'),
   title: z.string().min(3, 'Title must be at least 3 characters long'),
