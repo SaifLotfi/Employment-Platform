@@ -1,7 +1,8 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, query, Request, Response } from 'express';
+import stringSimilarity from 'string-similarity';
 
+import { employeeRepository } from '../models/employee.model';
 import { jobRepository } from '../models/job.model';
-
 import { NUMBER_OF_CARDS_PER_PAGE } from '../utils/constants';
 import { getJobFilterObject } from '../utils/get-filter-object';
 
@@ -23,7 +24,7 @@ const getPostedJobs = async (req: Request, res: Response, _next: NextFunction) =
   const jobs = await jobRepository.getPostedJobs(
     NUMBER_OF_CARDS_PER_PAGE * (Number(page) - 1),
     NUMBER_OF_CARDS_PER_PAGE,
-    res.locals.empId,
+    res.locals.empId
   );
 
   const totalPages = Math.ceil(numberOfJobs / NUMBER_OF_CARDS_PER_PAGE);
@@ -48,7 +49,7 @@ const getJobById = async (req: Request, res: Response, _next: NextFunction) => {
     return;
   }
 
-  if( res.locals.userType === 'employer' && job.empId !== res.locals.empId) {
+  if (res.locals.userType === 'employer' && job.empId !== res.locals.empId) {
     res.render('404', {
       title: 'Not Found',
       path: '/400',
@@ -59,7 +60,7 @@ const getJobById = async (req: Request, res: Response, _next: NextFunction) => {
     title: 'Job Details',
     path: '/job/:id',
     job,
-    userType:res.locals.userType
+    userType: res.locals.userType,
   });
 };
 
@@ -86,7 +87,7 @@ const getAllJobs = async (req: Request, res: Response, _next: NextFunction) => {
     jobs,
     currentPage: page,
     totalPages,
-    query
+    query,
   });
 };
 
@@ -95,20 +96,49 @@ const applyForAJob = async (req: Request, res: Response, _next: NextFunction) =>
   const empId = res.locals.empId;
   await jobRepository.applyForAJob(jobId, empId);
   res.redirect(`/job/${jobId}`);
-}
+};
 
 const acceptJobApplication = async (req: Request, res: Response, _next: NextFunction) => {
   const jobId = req.params.jobId;
   const empId = req.body.empId;
-  await jobRepository.changeJobApplicationStatus(jobId, empId,'accepted');
+  await jobRepository.changeJobApplicationStatus(jobId, empId, 'accepted');
   res.redirect(`/job/${jobId}`);
-}
+};
 const rejectJobApplication = async (req: Request, res: Response, _next: NextFunction) => {
   const jobId = req.params.jobId;
   const empId = req.body.empId;
-  await jobRepository.changeJobApplicationStatus(jobId, empId,'rejected');
+  await jobRepository.changeJobApplicationStatus(jobId, empId, 'rejected');
   res.redirect(`/job/${jobId}`);
-}
+};
+
+const getSuggestedJobs = async (req: Request, res: Response, _next: NextFunction) => {
+  const employee = await employeeRepository.getEmployeeById(res.locals.empId);
+
+  //const filters = getJobFilterObject({
+  //  expLevel: employee?.expLevel,
+  //  query: ""
+  //});
+
+  const jobs = await jobRepository.getAllJobs(0, 10, { expLevel: { equals: employee?.expLevel } });
+
+  const employeeInfo = `${employee?.title} ${employee?.bio}`;
+
+  const jobRatings = jobs.map(job => ({
+    job,
+    rating: stringSimilarity.compareTwoStrings(employeeInfo, `${job.title} ${job.description}`),
+  }));
+
+  const suggestedJobs = jobRatings
+    .sort((a, b) => b.rating - a.rating)
+    .slice(0, NUMBER_OF_CARDS_PER_PAGE)
+    .map(item => item.job);
+
+  res.render('suggested-jobs', {
+    title: 'Suggested Jobs',
+    path: '/job/suggested',
+    jobs:suggestedJobs,
+  });
+};
 
 export const jobController = {
   postJob,
@@ -117,5 +147,6 @@ export const jobController = {
   getAllJobs,
   applyForAJob,
   acceptJobApplication,
-  rejectJobApplication
+  rejectJobApplication,
+  getSuggestedJobs
 };

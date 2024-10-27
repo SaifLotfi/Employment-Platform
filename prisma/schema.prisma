@@ -19,7 +19,7 @@ model Employee {
   email         String             @unique
   name          String
   city          String
-  bio           String?
+  bio           String
   expLevel      ExpLevel
   password      String
   title         String

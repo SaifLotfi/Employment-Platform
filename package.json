@@ -6,6 +6,7 @@
     "@types/cookie-parser": "^1.4.7",
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.7",
+    "@types/string-similarity": "^4.0.2",
     "eslint": "^9.13.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-security": "^3.0.1",
@@ -24,7 +25,8 @@
     "ejs": "^3.1.10",
     "express": "^4.21.1",
     "express-async-errors": "^3.1.1",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "string-similarity": "^4.0.4"
   },
   "name": "employment-platform",
   "version": "1.0.0",
