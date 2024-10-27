@@ -1,11 +1,11 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 import { employeeRepository } from '../models/employee.model';
 import { AppError } from '../utils/app-error';
 import { NUMBER_OF_CARDS_PER_PAGE } from '../utils/constants';
+import { getEmployeeFilterObject } from '../utils/get-filter-object';
 import { isPasswordMatch } from '../utils/hash-password';
 import { signJwt } from '../utils/jwt';
-import { getEmployeeFilterObject } from '../utils/get-filter-object';
 
 const registerEmployee = async (req: Request, res: Response) => {
   const existingEmail = await employeeRepository.getEmployeeByEmail(req.body.email);
@@ -94,7 +94,33 @@ const getAllEmployees = async (req: Request, res: Response) => {
     employees,
     currentPage: page,
     totalPages,
-    query
+    query,
+  });
+};
+
+const getProfile = async (req: Request, res: Response, _next: NextFunction) => {
+  const employee = await employeeRepository.getEmployeeById(req.params.id);
+
+  if (!employee) {
+    res.render('404', {
+      title: 'Not Found',
+      path: '/400',
+    });
+    return;
+  }
+
+  if (res.locals.userType === 'employee' && employee.empId !== res.locals.empId) {
+    res.render('404', {
+      title: 'Not Found',
+      path: '/400',
+    });
+  }
+
+  res.render('employee-profile', {
+    title: 'Employee Profile',
+    path: '/employee/:id',
+    employee,
+    userType: res.locals.userType,
   });
 };
 
@@ -102,4 +128,5 @@ export const employeeController = {
   registerEmployee,
   loginEmployee,
   getAllEmployees,
+  getProfile,
 };

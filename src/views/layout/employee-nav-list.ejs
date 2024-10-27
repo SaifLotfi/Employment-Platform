@@ -6,7 +6,7 @@
     <a href="/job/search" class="nav-link <%= path ==='/job/search' || path ==='/job/:id'  ? 'active': '' %>">Search For Jobs</a>
   </li>
   <li class="nav-item">
-    <a href="/employee/profile" class="nav-link <%= path ==='/employee/profile' ? 'active': '' %>">Profile</a>
+    <a href="/employee/<%= empId %>" class="nav-link <%= path ==='/employee/:id' ? 'active': '' %>">Profile</a>
   </li>
   <li class="nav-item">
     <a href="/logout" class="nav-link <%= path === '/signup' ? 'active': '' %> ">Logout</a>

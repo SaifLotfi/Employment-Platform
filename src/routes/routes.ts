@@ -48,6 +48,8 @@ router.get('/job/search',isAuth,jobController.getAllJobs);
 
 router.get('/job/:id',isAuth,jobController.getJobById);
 
+router.get('/employee/:id',isAuth,employeeController.getProfile);
+
 router.get('/500',authMiddleware, (_req:Request, res:Response) => {
   res.render('500', { title: 'Server Side Error', path: '/500', userType:res.locals.userType });
 });

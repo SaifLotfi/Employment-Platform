@@ -53,10 +53,27 @@ const getNumberOfEmployees = async (filters: any) => {
   return numberOfEmployees;
 };
 
+const getEmployeeById = async (empId: string) => {
+  const employee = await prisma.employee.findUnique({
+    where: {
+      empId,
+    },
+    include: {
+      jobs:{
+        include:{
+          job:true
+        }
+      } 
+    },
+  });
+  return employee;
+};
+
 export const employeeRepository: EmployeeDao = {
   createEmployee,
   getEmployeeByEmail,
   getEmployeeByNationalId,
   getAllEmployees,
   getNumberOfEmployees,
+  getEmployeeById
 };
