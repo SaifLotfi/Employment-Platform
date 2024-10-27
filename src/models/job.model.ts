@@ -31,19 +31,18 @@ const getPostedJobs = async (skip: number, take: number, empId: string) => {
   return jobs;
 };
 
-const getAllJobs = async (skip: number, take: number,filters:any) => {
+const getAllJobs = async (skip: number, take: number, filters: any) => {
   const jobs = await prisma.job.findMany({
     where: filters,
     skip,
-    take
+    take,
   });
 
   return jobs;
 };
 
 const getNumberOfPostedJobs = async (empId: string) => {
-
-    const numberOfJobs = await prisma.job.count({
+  const numberOfJobs = await prisma.job.count({
     where: {
       empId,
     },
@@ -52,7 +51,7 @@ const getNumberOfPostedJobs = async (empId: string) => {
   return numberOfJobs;
 };
 
-const getNumberOfAllJobs = async (filters:any) => {
+const getNumberOfAllJobs = async (filters: any) => {
   const numberOfJobs = await prisma.job.count({
     where: filters,
   });
@@ -65,8 +64,32 @@ const getJobById = async (jobId: string) => {
     where: {
       jobId,
     },
+    include: {
+      employees: true,
+    },
   });
   return job;
+};
+
+const applyForAJob = async (jobId: string, empId: string) => {
+  await prisma.job.update({
+    where: {
+      jobId,
+    },
+    data: {
+      employees: {
+        create: [
+          {
+            employee: {
+              connect: {
+                empId,
+              },
+            }
+          }
+        ],
+      },
+    },
+  });
 };
 
 export const jobRepository: JobDao = {
@@ -76,4 +99,5 @@ export const jobRepository: JobDao = {
   getNumberOfPostedJobs,
   getNumberOfAllJobs,
   getJobById,
+  applyForAJob,
 };

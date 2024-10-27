@@ -90,9 +90,17 @@ const getAllJobs = async (req: Request, res: Response, _next: NextFunction) => {
   });
 };
 
+const applyForAJob = async (req: Request, res: Response, _next: NextFunction) => {
+  const jobId = req.params.jobId;
+  const empId = res.locals.empId;
+  await jobRepository.applyForAJob(jobId, empId);
+  res.redirect(`/job/${jobId}`);
+}
+
 export const jobController = {
   postJob,
   getPostedJobs,
   getJobById,
-  getAllJobs
+  getAllJobs,
+  applyForAJob
 };
