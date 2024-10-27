@@ -116,6 +116,10 @@ const getProfile = async (req: Request, res: Response, _next: NextFunction) => {
     });
   }
 
+  if (res.locals.userType === 'employer') {
+    await employeeRepository.addProfileViewsCount(employee.empId);
+  }
+
   res.render('employee-profile', {
     title: 'Employee Profile',
     path: '/employee/:id',

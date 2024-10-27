@@ -8,4 +8,5 @@ export type EmployeeDao = {
     getAllEmployees: (skip:number, take: number, filters:any) => Promise<Employee[]>;
     getNumberOfEmployees: (filters:any) => Promise<number>;
     getEmployeeById: (empId: string) => Promise<Employee | null>;
+    addProfileViewsCount: (empId: string) => Promise<void>;
 }
