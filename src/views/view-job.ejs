@@ -24,7 +24,21 @@
       <p><%= job.description %></p>
 
       <% if(userType === 'employee') { %>
-        <a href="/job/<%= job.jobId %>/apply" class="btn btn-primary">Apply</a>
+        <% const application = job.employees.find(app => app.empId === empId);
+            if(application){
+        %>
+          <%if(application.status === 'pending'){%>
+            <p class="text-primary">Pending</p>
+          <%} else if(application.status === 'rejected'){%>
+            <p class="text-danger">Rejected</p>
+          <% } else{ %>
+            <p class="text-success">Accepted</p>
+          <% } %>
+        <% } else{ %>
+          <form action="/job/<%= job.jobId %>/apply" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-success">Apply</button>
+          </form>
+        <% } %>
       <% } else{ %>
 
       <% } %>
