@@ -26,7 +26,9 @@
     "express": "^4.21.1",
     "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^9.0.2",
-    "string-similarity": "^4.0.4"
+    "string-similarity": "^4.0.4",
+    "zod": "^3.23.8",
+    "zod-validation-error": "^3.4.0"
   },
   "name": "employment-platform",
   "version": "1.0.0",
