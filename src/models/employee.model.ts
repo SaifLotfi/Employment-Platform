@@ -69,11 +69,26 @@ const getEmployeeById = async (empId: string) => {
   return employee;
 };
 
+export const addProfileViewsCount = async (empId: string) => {
+  await prisma.employee.update({
+    where: {
+      empId,
+    },
+    data: {
+      numberOfViews: {
+        increment: 1,
+      },
+    },
+  });
+};
+
+
 export const employeeRepository: EmployeeDao = {
   createEmployee,
   getEmployeeByEmail,
   getEmployeeByNationalId,
   getAllEmployees,
   getNumberOfEmployees,
-  getEmployeeById
+  getEmployeeById,
+  addProfileViewsCount
 };
