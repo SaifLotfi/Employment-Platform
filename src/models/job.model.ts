@@ -65,7 +65,11 @@ const getJobById = async (jobId: string) => {
       jobId,
     },
     include: {
-      employees: true,
+      employees: {
+        include: {
+          employee: true,
+        },
+      },
     },
   });
   return job;
@@ -84,8 +88,8 @@ const applyForAJob = async (jobId: string, empId: string) => {
               connect: {
                 empId,
               },
-            }
-          }
+            },
+          },
         ],
       },
     },
