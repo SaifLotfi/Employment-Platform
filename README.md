@@ -29,7 +29,7 @@ The platform allows software developers (employees) to register, showcase their 
 ![Use Case Diagram](./docs/use-cases-diagram.jpg)
 
 ## Tech Stack:
-[![Technology Stack](https://skillicons.dev/icons?i=nodejs,express,ts,npm,prisma)](https://skillicons.dev)
+[![Technology Stack](https://skillicons.dev/icons?i=nodejs,express,ts,npm,postgres,prisma)](https://skillicons.dev)
 ![ejs](https://ejs.co/favicon.svg)
 
 ## Installation:
@@ -41,7 +41,7 @@ The platform allows software developers (employees) to register, showcase their 
 
 ### Environment Variables
 
-Fill in [exmaple.env](https://github.com/SaadMu7ammad/subul/blob/main/example.env) with your credentials and rename it to `.env`.
+Fill in [exmaple.env](https://github.com/SaifLotfi/Employment-Platform/blob/main/example.env) with your credentials and rename it to `.env`.
 
 ### Steps
 
