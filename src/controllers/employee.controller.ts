@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import stringSimilarity from 'string-similarity';
 
 import { employeeRepository } from '../models/employee.model';
 import { AppError } from '../utils/app-error';
@@ -80,18 +81,30 @@ const getAllEmployees = async (req: Request, res: Response) => {
 
   const numberOfEmployees = await employeeRepository.getNumberOfEmployees(filters);
 
-  const employees = await employeeRepository.getAllEmployees(
-    NUMBER_OF_CARDS_PER_PAGE * (Number(page) - 1),
-    NUMBER_OF_CARDS_PER_PAGE,
-    filters
-  );
+  const employees = await employeeRepository.getAllEmployees(0, Number.MAX_SAFE_INTEGER, filters);
+
+  const employeesRatings = employees.map(employee => ({
+    employee,
+    rating: stringSimilarity.compareTwoStrings(
+      query||'',
+      `${employee.name} ${employee.title} ${employee.bio} ${employee.expLevel}`
+    ),
+  }));
+
+  const sliceStartIndex = NUMBER_OF_CARDS_PER_PAGE * (Number(page) - 1);
+  const sliceEndIndex = sliceStartIndex + NUMBER_OF_CARDS_PER_PAGE;
+
+  const sortedEmployees = employeesRatings
+    .sort((a, b) => b.rating - a.rating)
+    .slice(sliceStartIndex, sliceEndIndex)
+    .map(item => item.employee);
 
   const totalPages = Math.ceil(numberOfEmployees / NUMBER_OF_CARDS_PER_PAGE);
 
   res.render('search-for-employees', {
     title: 'Search For Employees',
     path: '/employee/search',
-    employees,
+    employees: sortedEmployees,
     currentPage: page,
     totalPages,
     query,
