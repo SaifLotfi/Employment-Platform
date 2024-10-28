@@ -1,10 +1,6 @@
 import { Request, Response } from 'express';
-import stringSimilarity from 'string-similarity';
-
-import { employeeRepository } from '../models/employee.model';
 import { employeeService } from '../services/employee.service';
-import { NUMBER_OF_CARDS_PER_PAGE } from '../utils/constants';
-import { getEmployeeFilterObject } from '../utils/get-filter-object';
+import { JWT_MAX_AGE } from '../utils/constants';
 
 const registerEmployee = async (req: Request, res: Response) => {
   await employeeService.checkIfEmployeeWithSameEmailExists(req.body.email);
@@ -17,7 +13,7 @@ const registerEmployee = async (req: Request, res: Response) => {
   res.cookie('token', token, {
     httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
     secure: true, // Ensures the cookie is only sent over HTTPS
-    maxAge: 3600000, // 1 hour expiration
+    maxAge: JWT_MAX_AGE, // 1 hour expiration
   });
 };
 
@@ -32,11 +28,11 @@ const loginEmployee = async (req: Request, res: Response) => {
   res.cookie('token', token, {
     httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
     secure: true, // Ensures the cookie is only sent over HTTPS
-    maxAge: 3600000, // 1 hour expiration
+    maxAge: JWT_MAX_AGE, // 1 hour expiration
   });
 };
 
-const getAllEmployees = async (req: Request, res: Response) => {
+const getAllEmployees = async (req: Request, _res: Response) => {
   const  page = req.query.page as string || '1' ;
 
   const query = req.query.query as string;
