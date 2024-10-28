@@ -15,26 +15,19 @@ const postJob = async (req: Request, res: Response) => {
   });
 };
 
-const getPostedJobs = async (req: Request, res: Response, _next: NextFunction) => {
-  const { page = 1 } = req.query;
+const getPostedJobs = async (req: Request, res: Response) => {
+  const page = req.query.page as string || '1' ;
 
-  const numberOfJobs = await jobRepository.getNumberOfPostedJobs(res.locals.empId);
-
-  const jobs = await jobRepository.getPostedJobs(
-    NUMBER_OF_CARDS_PER_PAGE * (Number(page) - 1),
-    NUMBER_OF_CARDS_PER_PAGE,
-    res.locals.empId
+  const { jobs, totalPages } = await jobService.getPostedJobsAndPaginationInfo(
+    res.locals.empId,
+    page
   );
 
-  const totalPages = Math.ceil(numberOfJobs / NUMBER_OF_CARDS_PER_PAGE);
-
-  res.render('posted-jobs', {
-    title: 'Posted Jobs',
-    path: '/job/posted',
+  return {
     jobs,
-    currentPage: page,
+    currentPage:page,
     totalPages,
-  });
+  }
 };
 
 const getJobById = async (req: Request, res: Response, _next: NextFunction) => {

@@ -41,10 +41,22 @@ router.get('/job/post', isAuth, isEmployer, (_req: Request, res: Response) => {
   res.render('post-jobs', { title: 'Post Jobs', path: '/job/post', error: false });
 });
 
-router.get('/job/posted', isAuth, isEmployer, jobController.getPostedJobs);
+router.get('/job/posted', isAuth, isEmployer, async (req: Request, res: Response) => {
+  const { jobs, currentPage, totalPages } = await jobController.getPostedJobs(req, res);
+  res.render('posted-jobs', {
+    title: 'Posted Jobs',
+    path: '/job/posted',
+    jobs,
+    currentPage,
+    totalPages,
+  });
+});
 
-router.get('/employee/search', isAuth, isEmployer,  async (req: Request, res: Response) => {
-  const { employees, currentPage, totalPages, query } = await employeeController.getAllEmployees(req, res);
+router.get('/employee/search', isAuth, isEmployer, async (req: Request, res: Response) => {
+  const { employees, currentPage, totalPages, query } = await employeeController.getAllEmployees(
+    req,
+    res
+  );
 
   res.render('search-for-employees', {
     title: 'Search For Employees',
