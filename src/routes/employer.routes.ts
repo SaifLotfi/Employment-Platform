@@ -16,8 +16,8 @@ router.post(
   validate(
     employerSchema.pick({ email: true, password: true }),
     'Register Employer',
-    '/employer/signup',
-    'employer-signup'
+    '/employer/login',
+    'employer-login'
   ),
   employerController.loginEmployer
 );

@@ -111,13 +111,8 @@ const rejectJobApplication = async (req: Request, res: Response, _next: NextFunc
   res.redirect(`/job/${jobId}`);
 };
 
-const getSuggestedJobs = async (req: Request, res: Response, _next: NextFunction) => {
+const getSuggestedJobs = async (_req: Request, res: Response, _next: NextFunction) => {
   const employee = await employeeRepository.getEmployeeById(res.locals.empId);
-
-  //const filters = getJobFilterObject({
-  //  expLevel: employee?.expLevel,
-  //  query: ""
-  //});
 
   const jobs = await jobRepository.getAllJobs(0, 10, { expLevel: { equals: employee?.expLevel } });
 
