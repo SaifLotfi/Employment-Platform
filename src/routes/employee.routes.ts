@@ -8,7 +8,10 @@ const router = express.Router();
 router.post(
   '/employee/signup',
   validate(employeeSchema, 'Register Employee', '/employee/signup', 'employee-signup'),
-  employeeController.registerEmployee
+  async (req, res, _next) => {
+    await employeeController.registerEmployee(req, res);
+    res.redirect('/');
+  }
 );
 
 router.post(

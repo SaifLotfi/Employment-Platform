@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import stringSimilarity from 'string-similarity';
 
 import { employeeRepository } from '../models/employee.model';
+import { employeeService } from '../services/employee.service';
 import { AppError } from '../utils/app-error';
 import { NUMBER_OF_CARDS_PER_PAGE } from '../utils/constants';
 import { getEmployeeFilterObject } from '../utils/get-filter-object';
@@ -9,27 +10,11 @@ import { isPasswordMatch } from '../utils/hash-password';
 import { signJwt } from '../utils/jwt';
 
 const registerEmployee = async (req: Request, res: Response) => {
-  const existingEmail = await employeeRepository.getEmployeeByEmail(req.body.email);
+  await employeeService.checkIfEmployeeWithSameEmailExists(req.body.email);
 
-  const existingNationalId = await employeeRepository.getEmployeeByNationalId(req.body.nationalId);
+  await employeeService.checkIfEmployeeWithSameNationalIdExists(req.body.nationalId);
 
-  if (existingEmail)
-    throw new AppError('Email is already taken', 400, {
-      title: 'signup',
-      path: 'signup',
-      page: 'employee-signup',
-    });
-
-  if (existingNationalId)
-    throw new AppError('An Account with this National ID is already registered', 400, {
-      title: 'signup',
-      path: 'signup',
-      page: 'employee-signup',
-    });
-
-  const employee = await employeeRepository.createEmployee(req.body);
-
-  const token = signJwt({ empId: employee.empId, userType: 'employee' }, '1h');
+  const token = await employeeService.registerEmployeeAndGenerateToken(req.body);
 
   // Store the JWT in an HTTP-only cookie
   res.cookie('token', token, {
@@ -37,8 +22,6 @@ const registerEmployee = async (req: Request, res: Response) => {
     secure: true, // Ensures the cookie is only sent over HTTPS
     maxAge: 3600000, // 1 hour expiration
   });
-
-  res.redirect('/');
 };
 
 const loginEmployee = async (req: Request, res: Response) => {
@@ -86,7 +69,7 @@ const getAllEmployees = async (req: Request, res: Response) => {
   const employeesRatings = employees.map(employee => ({
     employee,
     rating: stringSimilarity.compareTwoStrings(
-      query||'',
+      query || '',
       `${employee.name} ${employee.title} ${employee.bio} ${employee.expLevel}`
     ),
   }));
