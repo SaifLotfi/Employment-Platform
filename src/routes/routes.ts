@@ -80,7 +80,14 @@ router.get('/job/search', isAuth, isEmployee, async (req: Request, res: Response
   });
 });
 
-router.get('/job/suggested', isAuth, jobController.getSuggestedJobs);
+router.get('/job/suggested', isAuth, async (req: Request, res: Response) => {
+  const suggestedJobs = await jobController.getSuggestedJobs(req, res);
+  res.render('suggested-jobs', {
+    title: 'Suggested Jobs',
+    path: '/job/suggested',
+    jobs: suggestedJobs,
+  });
+});
 
 router.get('/job/:id', isAuth, async (req: Request, res: Response) => {
   const { job, userType } = await jobController.getJobById(req, res);

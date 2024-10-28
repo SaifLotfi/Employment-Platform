@@ -3,9 +3,10 @@ import stringSimilarity from 'string-similarity';
 
 import { employeeRepository } from '../models/employee.model';
 import { jobRepository } from '../models/job.model';
+import { employeeService } from '../services/employee.service';
+import { jobService } from '../services/job.service';
 import { NUMBER_OF_CARDS_PER_PAGE } from '../utils/constants';
 import { getJobFilterObject } from '../utils/get-filter-object';
-import { jobService } from '../services/job.service';
 
 const postJob = async (req: Request, res: Response) => {
   await jobService.postJob({
@@ -16,7 +17,7 @@ const postJob = async (req: Request, res: Response) => {
 };
 
 const getPostedJobs = async (req: Request, res: Response) => {
-  const page = req.query.page as string || '1' ;
+  const page = (req.query.page as string) || '1';
 
   const { jobs, totalPages } = await jobService.getPostedJobsAndPaginationInfo(
     res.locals.empId,
@@ -25,9 +26,9 @@ const getPostedJobs = async (req: Request, res: Response) => {
 
   return {
     jobs,
-    currentPage:page,
+    currentPage: page,
     totalPages,
-  }
+  };
 };
 
 const getJobById = async (req: Request, res: Response) => {
@@ -42,26 +43,22 @@ const getJobById = async (req: Request, res: Response) => {
   return {
     job,
     userType: res.locals.userType,
-  }
-
+  };
 };
 
 const getAllJobs = async (req: Request, _res: Response) => {
-  const  page = req.query.page as string || '1' ;
+  const page = (req.query.page as string) || '1';
 
   const query = req.query.query as string;
 
-  const { jobs, totalPages } = await jobService.filterJobsAndGetTotalNumberOfPages(
-   req.query,
-    page
-  );
+  const { jobs, totalPages } = await jobService.filterJobsAndGetTotalNumberOfPages(req.query, page);
 
   return {
     jobs,
     currentPage: page,
     totalPages,
     query,
-  }
+  };
 };
 
 const applyForAJob = async (req: Request, res: Response, _next: NextFunction) => {
@@ -84,28 +81,16 @@ const rejectJobApplication = async (req: Request, res: Response, _next: NextFunc
   res.redirect(`/job/${jobId}`);
 };
 
-const getSuggestedJobs = async (_req: Request, res: Response, _next: NextFunction) => {
-  const employee = await employeeRepository.getEmployeeById(res.locals.empId);
+const getSuggestedJobs = async (_req: Request, res: Response) => {
+  const { employee, employeeInfo } = await jobService.getEmployeeInfo(res.locals.empId);
 
-  const jobs = await jobRepository.getAllJobs(0, 10, { expLevel: { equals: employee?.expLevel } });
-
-  const employeeInfo = `${employee?.title} ${employee?.bio}`;
-
-  const jobRatings = jobs.map(job => ({
-    job,
-    rating: stringSimilarity.compareTwoStrings(employeeInfo, `${job.title} ${job.description}`),
-  }));
-
-  const suggestedJobs = jobRatings
-    .sort((a, b) => b.rating - a.rating)
-    .slice(0, NUMBER_OF_CARDS_PER_PAGE)
-    .map(item => item.job);
-
-  res.render('suggested-jobs', {
-    title: 'Suggested Jobs',
-    path: '/job/suggested',
-    jobs:suggestedJobs,
+  const jobs = await jobRepository.getAllJobs(0, Number.MAX_SAFE_INTEGER, {
+    expLevel: { equals: employee?.expLevel },
   });
+
+  const suggestedJobs = jobService.sortJobsBasedOnEmployeeTitleAndBio(employeeInfo, jobs);
+
+  return suggestedJobs;
 };
 
 export const jobController = {
@@ -116,5 +101,5 @@ export const jobController = {
   applyForAJob,
   acceptJobApplication,
   rejectJobApplication,
-  getSuggestedJobs
+  getSuggestedJobs,
 };

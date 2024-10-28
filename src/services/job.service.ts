@@ -1,5 +1,7 @@
 import { Job } from '@prisma/client';
+import stringSimilarity from 'string-similarity';
 
+import { employeeRepository } from '../models/employee.model';
 import { jobRepository } from '../models/job.model';
 import { CreateJobDTO } from '../types/dto/job.dto';
 import { NotFoundError } from '../utils/app-error';
@@ -47,7 +49,7 @@ const preventUnauthorizedAccessToViewJobPage = async (
   }
 };
 
-const filterJobsAndGetTotalNumberOfPages = async (reqQueryObject:any, page: string) => {
+const filterJobsAndGetTotalNumberOfPages = async (reqQueryObject: any, page: string) => {
   const filters = getJobFilterObject(reqQueryObject);
 
   const numberOfJobs = await jobRepository.getNumberOfAllJobs(filters);
@@ -64,12 +66,50 @@ const filterJobsAndGetTotalNumberOfPages = async (reqQueryObject:any, page: stri
     jobs,
     totalPages,
   };
-}
+};
+
+const getAllFilteredJobs = async (empId: string) => {
+  const employee = await employeeRepository.getEmployeeById(empId);
+
+  const employeeInfo = `${employee?.title} ${employee?.bio}`;
+
+  const jobs = await jobRepository.getAllJobs(0, Number.MAX_SAFE_INTEGER, {
+    expLevel: { equals: employee?.expLevel },
+  });
+
+  return {
+    jobs,
+  };
+};
+
+const sortJobsBasedOnEmployeeTitleAndBio = (employeeInfo: string, jobs: Job[]) => {
+  const jobRatings = jobs.map(job => ({
+    job,
+    rating: stringSimilarity.compareTwoStrings(employeeInfo, `${job.title} ${job.description}`),
+  }));
+
+  const suggestedJobs = jobRatings
+    .sort((a, b) => b.rating - a.rating)
+    .slice(0, NUMBER_OF_CARDS_PER_PAGE)
+    .map(item => item.job);
+
+  return suggestedJobs;
+};
+
+const getEmployeeInfo = async (empId: string) => {
+  const employee = await employeeRepository.getEmployeeById(empId);
+
+  const employeeInfo = `${employee?.title} ${employee?.bio}`;
+
+  return { employeeInfo, employee };
+};
 
 export const jobService = {
   postJob,
   getPostedJobsAndPaginationInfo,
   checkIfJobExists,
   preventUnauthorizedAccessToViewJobPage,
-  filterJobsAndGetTotalNumberOfPages
+  filterJobsAndGetTotalNumberOfPages,
+  sortJobsBasedOnEmployeeTitleAndBio,
+  getEmployeeInfo,
 };
