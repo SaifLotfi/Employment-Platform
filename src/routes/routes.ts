@@ -72,7 +72,15 @@ router.get('/job/search', isAuth, isEmployee, jobController.getAllJobs);
 
 router.get('/job/suggested', isAuth, jobController.getSuggestedJobs);
 
-router.get('/job/:id', isAuth, jobController.getJobById);
+router.get('/job/:id', isAuth, async (req: Request, res: Response) => {
+  const { job, userType } = await jobController.getJobById(req, res);
+  res.render('view-job', {
+    title: 'Job Details',
+    path: '/job/:id',
+    job,
+    userType,
+  });
+});
 
 router.get('/employee/:id', isAuth, async (req: Request, res: Response) => {
   const { employee, userType } = await employeeController.getProfile(req, res);

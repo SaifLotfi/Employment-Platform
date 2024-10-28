@@ -30,30 +30,19 @@ const getPostedJobs = async (req: Request, res: Response) => {
   }
 };
 
-const getJobById = async (req: Request, res: Response, _next: NextFunction) => {
-  const job = await jobRepository.getJobById(req.params.id);
+const getJobById = async (req: Request, res: Response) => {
+  const job = await jobService.checkIfJobExists(req.params.id);
 
-  if (!job) {
-    res.render('404', {
-      title: 'Not Found',
-      path: '/400',
-    });
-    return;
-  }
-
-  if (res.locals.userType === 'employer' && job.empId !== res.locals.empId) {
-    res.render('404', {
-      title: 'Not Found',
-      path: '/400',
-    });
-  }
-
-  res.render('view-job', {
-    title: 'Job Details',
-    path: '/job/:id',
+  await jobService.preventUnauthorizedAccessToViewJobPage(
+    res.locals.userType,
+    res.locals.empId,
+    job
+  );
+  return {
     job,
     userType: res.locals.userType,
-  });
+  }
+
 };
 
 const getAllJobs = async (req: Request, res: Response, _next: NextFunction) => {
