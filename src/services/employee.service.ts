@@ -1,6 +1,6 @@
 import { employeeRepository } from '../models/employee.model';
 import { CreateEmployeeDTO } from '../types/dto/employee.dto';
-import { AppError } from '../utils/app-error';
+import { AppError, NotFoundError } from '../utils/app-error';
 import { isPasswordMatch } from '../utils/hash-password';
 import { signJwt } from '../utils/jwt';
 
@@ -60,11 +60,35 @@ const generateJWTToken = async (empId: string) => {
   return token;
 };
 
+const checkIfEmployeeProfileExists = async (empId: string) => {
+  const employee = await employeeRepository.getEmployeeById(empId);
+
+  if (!employee) {
+    throw new NotFoundError('Employee not found');
+  }
+
+  return employee;
+}
+
+const preventUnauthorizedProfileAccess = async (empId: string,empProfileId:string,userType:'employee'|'employer') => {
+  if (userType === 'employee' && empId !== empProfileId ) {
+    throw new NotFoundError('Employee not found');
+  }
+}
+
+const addProfileViewsCountIfViewerIsEmployer = async (empId: string,userType:'employee'|'employer') => {
+  if(userType === 'employee')
+    await employeeRepository.addProfileViewsCount(empId);
+}
+
 export const employeeService = {
   checkIfEmployeeWithSameEmailExists,
   checkIfEmployeeWithSameNationalIdExists,
   registerEmployeeAndGenerateToken,
   checkIfEmployeeExists,
   checkIfPasswordIsCorrect,
-  generateJWTToken
+  generateJWTToken,
+  checkIfEmployeeProfileExists,
+  preventUnauthorizedProfileAccess,
+  addProfileViewsCountIfViewerIsEmployer
 };

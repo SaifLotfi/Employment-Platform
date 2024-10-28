@@ -1,18 +1,19 @@
 import express from 'express';
-import {Request, Response} from 'express';
-import { authMiddleware, isAuth, isEmployee, isEmployer } from '../middlewares/auth.middleware';
-import { jobController } from '../controllers/job.controller';
+import { Request, Response } from 'express';
+
 import { employeeController } from '../controllers/employee.controller';
+import { jobController } from '../controllers/job.controller';
+import { authMiddleware, isAuth, isEmployee, isEmployer } from '../middlewares/auth.middleware';
 
 const router = express.Router();
 
-router.get('/',authMiddleware,(_req:Request, res:Response) => {
+router.get('/', authMiddleware, (_req: Request, res: Response) => {
   if (res.locals.userType === 'employee') {
     res.redirect('/job/suggested');
   } else if (res.locals.userType === 'employer') {
     res.redirect('/job/posted');
   }
-  res.render('home', { title: 'Home Page', path: '/', userType:res.locals.userType });
+  res.render('home', { title: 'Home Page', path: '/', userType: res.locals.userType });
 });
 
 router.get('/logout', (_req, res) => {
@@ -20,44 +21,53 @@ router.get('/logout', (_req, res) => {
   res.redirect('/');
 });
 
-router.get('/employee/signup', (_req:Request, res:Response) => {
-  res.render('employee-signup', { title: 'signup', path: '/signup',error:false  });
+router.get('/employee/signup', (_req: Request, res: Response) => {
+  res.render('employee-signup', { title: 'signup', path: '/signup', error: false });
 });
 
-router.get('/employer/signup', (_req:Request, res:Response) => {
-  res.render('employer-signup', { title: 'signup', path: '/signup',error:false   });
+router.get('/employer/signup', (_req: Request, res: Response) => {
+  res.render('employer-signup', { title: 'signup', path: '/signup', error: false });
 });
 
-router.get('/employee/login', (_req:Request, res:Response) => {
-  res.render('employee-login', { title: 'login', path: '/login',error:false   });
+router.get('/employee/login', (_req: Request, res: Response) => {
+  res.render('employee-login', { title: 'login', path: '/login', error: false });
 });
 
-router.get('/employer/login', (_req:Request, res:Response) => {
-  res.render('employer-login', { title: 'login', path: '/login',error:false   });
+router.get('/employer/login', (_req: Request, res: Response) => {
+  res.render('employer-login', { title: 'login', path: '/login', error: false });
 });
 
-router.get('/job/post',isAuth,isEmployer, (_req:Request, res:Response) => {
-  res.render('post-jobs', { title: 'Post Jobs', path: '/job/post',error:false   });
+router.get('/job/post', isAuth, isEmployer, (_req: Request, res: Response) => {
+  res.render('post-jobs', { title: 'Post Jobs', path: '/job/post', error: false });
 });
 
-router.get('/job/posted',isAuth,isEmployer,  jobController.getPostedJobs);
+router.get('/job/posted', isAuth, isEmployer, jobController.getPostedJobs);
 
-router.get('/employee/search',isAuth,isEmployer,employeeController.getAllEmployees);
+router.get('/employee/search', isAuth, isEmployer, employeeController.getAllEmployees);
 
-router.get('/job/search',isAuth,isEmployee,jobController.getAllJobs);
+router.get('/job/search', isAuth, isEmployee, jobController.getAllJobs);
 
-router.get('/job/suggested',isAuth,jobController.getSuggestedJobs);
+router.get('/job/suggested', isAuth, jobController.getSuggestedJobs);
 
-router.get('/job/:id',isAuth,jobController.getJobById);
+router.get('/job/:id', isAuth, jobController.getJobById);
 
-router.get('/employee/:id',isAuth,employeeController.getProfile);
+router.get('/employee/:id', isAuth, async (req: Request, res: Response) => {
+  const { employee, userType } = await employeeController.getProfile(req, res);
 
-router.get('/500',authMiddleware, (_req:Request, res:Response) => {
-  res.render('500', { title: 'Server Side Error', path: '/500', userType:res.locals.userType });
+  res.render('employee-profile', {
+    title: 'Employee Profile',
+    path: '/employee/:id',
+    employee,
+    userType,
+  });
 });
 
-router.get('*',authMiddleware,(_req:Request, res:Response) => {
-  res.render('404', { title: 'Not Found', path: '/404', userType:res.locals.userType  });
+router.get('/500', authMiddleware, (_req: Request, res: Response) => {
+  res.render('500', { title: 'Server Side Error', path: '/500', userType: res.locals.userType });
+});
+
+router.get('*', authMiddleware, (_req: Request, res: Response) => {
+  res.render('404', { title: 'Not Found', path: '/404', userType: res.locals.userType });
 });
 
 export default router;

@@ -78,34 +78,20 @@ const getAllEmployees = async (req: Request, res: Response) => {
   });
 };
 
-const getProfile = async (req: Request, res: Response, _next: NextFunction) => {
-  const employee = await employeeRepository.getEmployeeById(req.params.id);
+const getProfile = async (req: Request, res: Response) => {
+  const userType = res.locals.userType;
 
-  if (!employee) {
-    res.render('404', {
-      title: 'Not Found',
-      path: '/400',
-    });
-    return;
-  }
+  const employee = await employeeService.checkIfEmployeeProfileExists(req.params.id);
 
-  if (res.locals.userType === 'employee' && employee.empId !== res.locals.empId) {
-    res.render('404', {
-      title: 'Not Found',
-      path: '/400',
-    });
-  }
+  await employeeService.preventUnauthorizedProfileAccess(req.params.id,employee.empId, userType);
 
-  if (res.locals.userType === 'employer') {
-    await employeeRepository.addProfileViewsCount(employee.empId);
-  }
+  await employeeService.addProfileViewsCountIfViewerIsEmployer(employee.empId, userType);
 
-  res.render('employee-profile', {
-    title: 'Employee Profile',
-    path: '/employee/:id',
+  return {
     employee,
-    userType: res.locals.userType,
-  });
+    userType
+  }
+
 };
 
 export const employeeController = {
