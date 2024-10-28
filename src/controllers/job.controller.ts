@@ -61,24 +61,22 @@ const getAllJobs = async (req: Request, _res: Response) => {
   };
 };
 
-const applyForAJob = async (req: Request, res: Response, _next: NextFunction) => {
+const applyForAJob = async (req: Request, res: Response) => {
   const jobId = req.params.jobId;
   const empId = res.locals.empId;
-  await jobRepository.applyForAJob(jobId, empId);
-  res.redirect(`/job/${jobId}`);
+  await jobService.applyForAJob(jobId, empId);
+  return jobId;
 };
 
-const acceptJobApplication = async (req: Request, res: Response, _next: NextFunction) => {
+const changeJobApplicationStatus = async (
+  req: Request,
+  _res: Response,
+  status: 'accepted' | 'rejected'
+) => {
   const jobId = req.params.jobId;
   const empId = req.body.empId;
-  await jobRepository.changeJobApplicationStatus(jobId, empId, 'accepted');
-  res.redirect(`/job/${jobId}`);
-};
-const rejectJobApplication = async (req: Request, res: Response, _next: NextFunction) => {
-  const jobId = req.params.jobId;
-  const empId = req.body.empId;
-  await jobRepository.changeJobApplicationStatus(jobId, empId, 'rejected');
-  res.redirect(`/job/${jobId}`);
+  await jobService.changeJobApplicationStatus(jobId, empId, status);
+  return jobId;
 };
 
 const getSuggestedJobs = async (_req: Request, res: Response) => {
@@ -99,7 +97,6 @@ export const jobController = {
   getJobById,
   getAllJobs,
   applyForAJob,
-  acceptJobApplication,
-  rejectJobApplication,
+  changeJobApplicationStatus,
   getSuggestedJobs,
 };

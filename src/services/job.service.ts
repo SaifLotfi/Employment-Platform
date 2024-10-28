@@ -104,6 +104,17 @@ const getEmployeeInfo = async (empId: string) => {
   return { employeeInfo, employee };
 };
 
+const applyForAJob = async (jobId: string, empId: string) => {
+  await jobRepository.applyForAJob(jobId, empId);
+};
+const changeJobApplicationStatus = async (
+  jobId: string,
+  empId: string,
+  status: 'accepted' | 'rejected'
+) => {
+  await jobRepository.changeJobApplicationStatus(jobId, empId, status);
+};
+
 export const jobService = {
   postJob,
   getPostedJobsAndPaginationInfo,
@@ -112,4 +123,6 @@ export const jobService = {
   filterJobsAndGetTotalNumberOfPages,
   sortJobsBasedOnEmployeeTitleAndBio,
   getEmployeeInfo,
+  applyForAJob,
+  changeJobApplicationStatus
 };
