@@ -8,7 +8,7 @@ const router = express.Router();
 router.post(
   '/employee/signup',
   validate(employeeSchema, 'Register Employee', '/employee/signup', 'employee-signup'),
-  async (req, res, _next) => {
+  async (req, res) => {
     await employeeController.registerEmployee(req, res);
     res.redirect('/');
   }
@@ -22,7 +22,10 @@ router.post(
     '/employee/signup',
     'employee-login'
   ),
-  employeeController.loginEmployee
+  async (req, res) => {
+    await employeeController.loginEmployee(req, res);
+    res.redirect('/');
+  }
 );
 
 export default router;

@@ -25,25 +25,11 @@ const registerEmployee = async (req: Request, res: Response) => {
 };
 
 const loginEmployee = async (req: Request, res: Response) => {
-  const employee = await employeeRepository.getEmployeeByEmail(req.body.email);
+  const employee = await employeeService.checkIfEmployeeExists(req.body.email);
 
-  if (!employee)
-    throw new AppError('Invalid credentials', 400, {
-      title: 'login',
-      path: '/login',
-      page: 'employee-login',
-    });
+  await employeeService.checkIfPasswordIsCorrect(req.body.password, employee.password);
 
-  const isMatch = await isPasswordMatch(req.body.password, employee.password);
-
-  if (!isMatch)
-    throw new AppError('Invalid credentials', 400, {
-      title: 'login',
-      path: '/login',
-      page: 'employee-login',
-    });
-
-  const token = signJwt({ empId: employee.empId, userType: 'employee' }, '1h');
+  const token = await employeeService.generateJWTToken(employee.empId);
 
   // Store the JWT in an HTTP-only cookie
   res.cookie('token', token, {
@@ -51,8 +37,6 @@ const loginEmployee = async (req: Request, res: Response) => {
     secure: true, // Ensures the cookie is only sent over HTTPS
     maxAge: 3600000, // 1 hour expiration
   });
-
-  res.redirect('/');
 };
 
 const getAllEmployees = async (req: Request, res: Response) => {
