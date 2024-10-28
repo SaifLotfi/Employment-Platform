@@ -1,19 +1,18 @@
-import { NextFunction, query, Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import stringSimilarity from 'string-similarity';
 
 import { employeeRepository } from '../models/employee.model';
 import { jobRepository } from '../models/job.model';
 import { NUMBER_OF_CARDS_PER_PAGE } from '../utils/constants';
 import { getJobFilterObject } from '../utils/get-filter-object';
+import { jobService } from '../services/job.service';
 
-const postJob = async (req: Request, res: Response, _next: NextFunction) => {
-  await jobRepository.createJob({
+const postJob = async (req: Request, res: Response) => {
+  await jobService.postJob({
     ...req.body,
     salary: Number(req.body.salary),
     empId: res.locals.empId,
   });
-
-  res.redirect('/job/post');
 };
 
 const getPostedJobs = async (req: Request, res: Response, _next: NextFunction) => {

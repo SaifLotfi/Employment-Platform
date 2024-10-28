@@ -11,7 +11,10 @@ router.post(
   isAuth,
   isEmployer,
   validate(jobSchema, 'Post Job', '/job/post', 'post-jobs'),
-  jobController.postJob
+  async (req, res) =>{
+    await jobController.postJob(req,res);
+    res.redirect('/job/post');
+  }
 );
 
 router.post('/job/:jobId/apply', isAuth, isEmployee, jobController.applyForAJob);

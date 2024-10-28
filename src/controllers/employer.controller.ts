@@ -1,8 +1,4 @@
-import { employerRepository } from "../models/employer.model";
 import { Request, Response } from "express";
-import { AppError } from "../utils/app-error";
-import { signJwt } from "../utils/jwt";
-import { isPasswordMatch } from "../utils/hash-password";
 import { employerService } from "../services/employer.service";
 import { JWT_MAX_AGE } from "../utils/constants";
 
