@@ -88,6 +88,7 @@ Fill in [example.env](https://github.com/SaifLotfi/Employment-Platform/blob/main
 git clone https://github.com/SaifLotfi/Employment-Platform.git
 cd Employment-Platform
 npm install
+npx ts-node db-seeder.ts
 npm start
 ```
 
