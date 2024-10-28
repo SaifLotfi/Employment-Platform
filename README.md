@@ -30,6 +30,7 @@ The platform allows software developers (employees) to register, showcase their 
 
 ## Tech Stack:
 [![Technology Stack](https://skillicons.dev/icons?i=nodejs,express,ts,npm,prisma)](https://skillicons.dev)
+![ejs](https://ejs.co/favicon.svg)
 
 ## Installation:
 
