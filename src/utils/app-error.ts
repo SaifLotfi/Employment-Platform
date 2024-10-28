@@ -2,21 +2,21 @@ export class AppError extends Error {
   public statusCode: number;
   public title?: string;
   public pageInfo: {
-      title:string,
-      path:string,
-      page:string
-  }
-  public data?: { [key: string]: string|boolean };
+    title: string;
+    path: string;
+    page: string;
+  };
+  public data?: { [key: string]: string | boolean };
 
   constructor(
     message: string,
     statusCode: number,
     pageInfo: {
-      title:string,
-      path:string,
-      page:string
+      title: string;
+      path: string;
+      page: string;
     },
-    data?: { [key: string]: string|boolean }
+    data?: { [key: string]: string | boolean }
   ) {
     super(message);
     this.statusCode = statusCode;
@@ -25,3 +25,8 @@ export class AppError extends Error {
   }
 }
 
+export class NotFoundError extends AppError {
+  constructor(message: string) {
+    super(message, 404, { title: 'Not Found', path: '/404', page: '404' });
+  }
+}
