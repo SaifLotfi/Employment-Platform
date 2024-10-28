@@ -26,10 +26,10 @@ The platform allows software developers (employees) to register, showcase their 
 ![Relational Data Model](./docs/Relational-Data-Model.png)
 
 ## Use Case Diagram:
-![Use Case Diagram](./docs/use-cases-diagram.pdf)
+![Use Case Diagram](./docs/use-cases-diagram.jpg)
 
 ## Tech Stack:
-[![Technology Stack](https://skillicons.dev/icons?i=nodejs,express,ts,prisma,ejs)](https://skillicons.dev)
+[![Technology Stack](https://skillicons.dev/icons?i=nodejs,express,ts,npm,prisma)](https://skillicons.dev)
 
 ## Installation:
 
