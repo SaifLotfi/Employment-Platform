@@ -1,13 +1,10 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import stringSimilarity from 'string-similarity';
 
 import { employeeRepository } from '../models/employee.model';
 import { employeeService } from '../services/employee.service';
-import { AppError } from '../utils/app-error';
 import { NUMBER_OF_CARDS_PER_PAGE } from '../utils/constants';
 import { getEmployeeFilterObject } from '../utils/get-filter-object';
-import { isPasswordMatch } from '../utils/hash-password';
-import { signJwt } from '../utils/jwt';
 
 const registerEmployee = async (req: Request, res: Response) => {
   await employeeService.checkIfEmployeeWithSameEmailExists(req.body.email);
@@ -40,42 +37,26 @@ const loginEmployee = async (req: Request, res: Response) => {
 };
 
 const getAllEmployees = async (req: Request, res: Response) => {
-  const { page = 1 } = req.query;
+  const  page = req.query.page as string || '1' ;
 
   const query = req.query.query as string;
 
-  const filters = getEmployeeFilterObject(req.query);
+  const { employees, totalPages } = await employeeService.filterEmployeesAndGetTotalNumberOfPages(
+    req.query
+  );
 
-  const numberOfEmployees = await employeeRepository.getNumberOfEmployees(filters);
+  const sortedEmployees = employeeService.sortEmployeesBasedOnQuerySimilarity(
+    query,
+    employees,
+    page
+  );
 
-  const employees = await employeeRepository.getAllEmployees(0, Number.MAX_SAFE_INTEGER, filters);
-
-  const employeesRatings = employees.map(employee => ({
-    employee,
-    rating: stringSimilarity.compareTwoStrings(
-      query || '',
-      `${employee.name} ${employee.title} ${employee.bio} ${employee.expLevel}`
-    ),
-  }));
-
-  const sliceStartIndex = NUMBER_OF_CARDS_PER_PAGE * (Number(page) - 1);
-  const sliceEndIndex = sliceStartIndex + NUMBER_OF_CARDS_PER_PAGE;
-
-  const sortedEmployees = employeesRatings
-    .sort((a, b) => b.rating - a.rating)
-    .slice(sliceStartIndex, sliceEndIndex)
-    .map(item => item.employee);
-
-  const totalPages = Math.ceil(numberOfEmployees / NUMBER_OF_CARDS_PER_PAGE);
-
-  res.render('search-for-employees', {
-    title: 'Search For Employees',
-    path: '/employee/search',
+  return {
     employees: sortedEmployees,
     currentPage: page,
     totalPages,
     query,
-  });
+  };
 };
 
 const getProfile = async (req: Request, res: Response) => {
@@ -83,15 +64,14 @@ const getProfile = async (req: Request, res: Response) => {
 
   const employee = await employeeService.checkIfEmployeeProfileExists(req.params.id);
 
-  await employeeService.preventUnauthorizedProfileAccess(req.params.id,employee.empId, userType);
+  await employeeService.preventUnauthorizedProfileAccess(req.params.id, employee.empId, userType);
 
   await employeeService.addProfileViewsCountIfViewerIsEmployer(employee.empId, userType);
 
   return {
     employee,
-    userType
-  }
-
+    userType,
+  };
 };
 
 export const employeeController = {

@@ -43,7 +43,18 @@ router.get('/job/post', isAuth, isEmployer, (_req: Request, res: Response) => {
 
 router.get('/job/posted', isAuth, isEmployer, jobController.getPostedJobs);
 
-router.get('/employee/search', isAuth, isEmployer, employeeController.getAllEmployees);
+router.get('/employee/search', isAuth, isEmployer,  async (req: Request, res: Response) => {
+  const { employees, currentPage, totalPages, query } = await employeeController.getAllEmployees(req, res);
+
+  res.render('search-for-employees', {
+    title: 'Search For Employees',
+    path: '/employee/search',
+    employees,
+    currentPage,
+    totalPages,
+    query,
+  });
+});
 
 router.get('/job/search', isAuth, isEmployee, jobController.getAllJobs);
 

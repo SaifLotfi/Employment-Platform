@@ -1,8 +1,12 @@
+import { Employee } from '@prisma/client';
 import { employeeRepository } from '../models/employee.model';
 import { CreateEmployeeDTO } from '../types/dto/employee.dto';
 import { AppError, NotFoundError } from '../utils/app-error';
+import { NUMBER_OF_CARDS_PER_PAGE } from '../utils/constants';
+import { getEmployeeFilterObject } from '../utils/get-filter-object';
 import { isPasswordMatch } from '../utils/hash-password';
 import { signJwt } from '../utils/jwt';
+import stringSimilarity  from 'string-similarity';
 
 const checkIfEmployeeWithSameEmailExists = async (email: string) => {
   const existingEmail = await employeeRepository.getEmployeeByEmail(email);
@@ -81,6 +85,41 @@ const addProfileViewsCountIfViewerIsEmployer = async (empId: string,userType:'em
     await employeeRepository.addProfileViewsCount(empId);
 }
 
+const filterEmployeesAndGetTotalNumberOfPages = async (reqQueryObject:any) => {
+  const filters = getEmployeeFilterObject(reqQueryObject);
+
+  const numberOfEmployees = await employeeRepository.getNumberOfEmployees(filters);
+
+  const totalPages = Math.ceil(numberOfEmployees / NUMBER_OF_CARDS_PER_PAGE);
+
+  const employees = await employeeRepository.getAllEmployees(0, Number.MAX_SAFE_INTEGER, filters);
+
+  return {
+    employees,
+    totalPages
+  }
+}
+
+const sortEmployeesBasedOnQuerySimilarity = (query: string, employees: Employee[],page:string) => {
+  const employeesRatings = employees.map(employee => ({
+    employee,
+    rating: stringSimilarity.compareTwoStrings(
+      query || '',
+      `${employee.name} ${employee.title} ${employee.bio} ${employee.expLevel}`
+    ),
+  }));
+
+  const sliceStartIndex = NUMBER_OF_CARDS_PER_PAGE * (Number(page) - 1);
+  const sliceEndIndex = sliceStartIndex + NUMBER_OF_CARDS_PER_PAGE;
+
+  const sortedEmployees = employeesRatings
+    .sort((a, b) => b.rating - a.rating)
+    .slice(sliceStartIndex, sliceEndIndex)
+    .map(item => item.employee);
+
+  return sortedEmployees;
+}
+
 export const employeeService = {
   checkIfEmployeeWithSameEmailExists,
   checkIfEmployeeWithSameNationalIdExists,
@@ -90,5 +129,7 @@ export const employeeService = {
   generateJWTToken,
   checkIfEmployeeProfileExists,
   preventUnauthorizedProfileAccess,
-  addProfileViewsCountIfViewerIsEmployer
+  addProfileViewsCountIfViewerIsEmployer ,
+  filterEmployeesAndGetTotalNumberOfPages,
+  sortEmployeesBasedOnQuerySimilarity
 };
