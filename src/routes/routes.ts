@@ -68,7 +68,17 @@ router.get('/employee/search', isAuth, isEmployer, async (req: Request, res: Res
   });
 });
 
-router.get('/job/search', isAuth, isEmployee, jobController.getAllJobs);
+router.get('/job/search', isAuth, isEmployee, async (req: Request, res: Response) => {
+  const { jobs, currentPage, totalPages, query } = await jobController.getAllJobs(req, res);
+  res.render('search-for-jobs', {
+    title: 'Search For Jobs',
+    path: '/job/search',
+    jobs,
+    currentPage,
+    totalPages,
+    query,
+  });
+});
 
 router.get('/job/suggested', isAuth, jobController.getSuggestedJobs);
 

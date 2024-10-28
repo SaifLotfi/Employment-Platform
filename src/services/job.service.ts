@@ -4,6 +4,7 @@ import { jobRepository } from '../models/job.model';
 import { CreateJobDTO } from '../types/dto/job.dto';
 import { NotFoundError } from '../utils/app-error';
 import { NUMBER_OF_CARDS_PER_PAGE } from '../utils/constants';
+import { getJobFilterObject } from '../utils/get-filter-object';
 
 const postJob = async (jobData: CreateJobDTO) => {
   return await jobRepository.createJob(jobData);
@@ -46,9 +47,29 @@ const preventUnauthorizedAccessToViewJobPage = async (
   }
 };
 
+const filterJobsAndGetTotalNumberOfPages = async (reqQueryObject:any, page: string) => {
+  const filters = getJobFilterObject(reqQueryObject);
+
+  const numberOfJobs = await jobRepository.getNumberOfAllJobs(filters);
+
+  const jobs = await jobRepository.getAllJobs(
+    NUMBER_OF_CARDS_PER_PAGE * (Number(page) - 1),
+    NUMBER_OF_CARDS_PER_PAGE,
+    filters
+  );
+
+  const totalPages = Math.ceil(numberOfJobs / NUMBER_OF_CARDS_PER_PAGE);
+
+  return {
+    jobs,
+    totalPages,
+  };
+}
+
 export const jobService = {
   postJob,
   getPostedJobsAndPaginationInfo,
   checkIfJobExists,
   preventUnauthorizedAccessToViewJobPage,
+  filterJobsAndGetTotalNumberOfPages
 };

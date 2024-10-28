@@ -38,6 +38,7 @@ const getJobById = async (req: Request, res: Response) => {
     res.locals.empId,
     job
   );
+
   return {
     job,
     userType: res.locals.userType,
@@ -45,31 +46,22 @@ const getJobById = async (req: Request, res: Response) => {
 
 };
 
-const getAllJobs = async (req: Request, res: Response, _next: NextFunction) => {
-  const { page = 1 } = req.query;
+const getAllJobs = async (req: Request, _res: Response) => {
+  const  page = req.query.page as string || '1' ;
 
   const query = req.query.query as string;
 
-  const filters = getJobFilterObject(req.query);
-
-  const numberOfJobs = await jobRepository.getNumberOfAllJobs(filters);
-
-  const jobs = await jobRepository.getAllJobs(
-    NUMBER_OF_CARDS_PER_PAGE * (Number(page) - 1),
-    NUMBER_OF_CARDS_PER_PAGE,
-    filters
+  const { jobs, totalPages } = await jobService.filterJobsAndGetTotalNumberOfPages(
+   req.query,
+    page
   );
 
-  const totalPages = Math.ceil(numberOfJobs / NUMBER_OF_CARDS_PER_PAGE);
-
-  res.render('search-for-jobs', {
-    title: 'Search For Jobs',
-    path: '/job/search',
+  return {
     jobs,
     currentPage: page,
     totalPages,
     query,
-  });
+  }
 };
 
 const applyForAJob = async (req: Request, res: Response, _next: NextFunction) => {
