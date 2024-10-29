@@ -81,7 +81,7 @@ const preventUnauthorizedProfileAccess = async (empId: string,empProfileId:strin
 }
 
 const addProfileViewsCountIfViewerIsEmployer = async (empId: string,userType:'employee'|'employer') => {
-  if(userType === 'employee')
+  if(userType === 'employer')
     await employeeRepository.addProfileViewsCount(empId);
 }
 
