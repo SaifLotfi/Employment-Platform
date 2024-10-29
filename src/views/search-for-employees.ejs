@@ -87,19 +87,19 @@
       <ul class="pagination">
         <!-- Previous Page Button -->
         <li class="page-item <%= currentPage == 1 ? 'disabled' : '' %>">
-          <a class="page-link" href="?query=<%= query %>&page=<%= parseInt(currentPage) - 1 %>">Previous</a>
+          <a class="page-link" href="?query=<%= query %>&page=<%= parseInt(currentPage) - 1 %>&city=<%=city%>&expLevel=<%=expLevel%>">Previous</a>
         </li>
 
         <!-- Page Number Buttons -->
         <% for (let i = 1; i <= totalPages; i++) { %>
           <li class="page-item <%= currentPage == i ? 'active' : '' %>">
-            <a class="page-link" href="?query=<%= query %>&page=<%= i %>"><%= i %></a>
+            <a class="page-link" href="?query=<%= query %>&page=<%= i %>&city=<%=city%>&expLevel=<%=expLevel%>"><%= i %></a>
           </li>
         <% } %>
 
         <!-- Next Page Button -->
         <li class="page-item <%= currentPage == totalPages || totalPages == 0 ? 'disabled' : '' %>">
-          <a class="page-link" href="?query=<%= query %>&page=<%= parseInt(currentPage) + 1 %>">Next</a>
+          <a class="page-link" href="?query=<%= query %>&page=<%= parseInt(currentPage) + 1 %>&city=<%=city%>&expLevel=<%=expLevel%>">Next</a>
         </li>
       </ul>
     </nav>

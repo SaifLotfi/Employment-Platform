@@ -53,7 +53,7 @@ router.get('/job/posted', isAuth, isEmployer, async (req: Request, res: Response
 });
 
 router.get('/employee/search', isAuth, isEmployer, async (req: Request, res: Response) => {
-  const { employees, currentPage, totalPages, query } = await employeeController.getAllEmployees(
+  const { employees, currentPage, totalPages, query,city,expLevel } = await employeeController.getAllEmployees(
     req,
     res
   );
@@ -65,11 +65,13 @@ router.get('/employee/search', isAuth, isEmployer, async (req: Request, res: Res
     currentPage,
     totalPages,
     query,
+    city,
+    expLevel
   });
 });
 
 router.get('/job/search', isAuth, isEmployee, async (req: Request, res: Response) => {
-  const { jobs, currentPage, totalPages, query } = await jobController.getAllJobs(req, res);
+  const { jobs, currentPage, totalPages, query,expLevel } = await jobController.getAllJobs(req, res);
   res.render('search-for-jobs', {
     title: 'Search For Jobs',
     path: '/job/search',
@@ -77,6 +79,7 @@ router.get('/job/search', isAuth, isEmployee, async (req: Request, res: Response
     currentPage,
     totalPages,
     query,
+    expLevel
   });
 });
 

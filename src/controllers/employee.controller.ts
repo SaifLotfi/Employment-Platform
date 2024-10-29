@@ -52,6 +52,8 @@ const getAllEmployees = async (req: Request, _res: Response) => {
     currentPage: page,
     totalPages,
     query,
+    city: req.query.city as string,
+    expLevel: req.query.expLevel as string,
   };
 };
 
