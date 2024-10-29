@@ -1,12 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
-import stringSimilarity from 'string-similarity';
+import { Request, Response } from 'express';
 
-import { employeeRepository } from '../models/employee.model';
-import { jobRepository } from '../models/job.model';
-import { employeeService } from '../services/employee.service';
 import { jobService } from '../services/job.service';
-import { NUMBER_OF_CARDS_PER_PAGE } from '../utils/constants';
-import { getJobFilterObject } from '../utils/get-filter-object';
 
 const postJob = async (req: Request, res: Response) => {
   await jobService.postJob({
@@ -82,9 +76,7 @@ const changeJobApplicationStatus = async (
 const getSuggestedJobs = async (_req: Request, res: Response) => {
   const { employee, employeeInfo } = await jobService.getEmployeeInfo(res.locals.empId);
 
-  const jobs = await jobRepository.getAllJobs(0, Number.MAX_SAFE_INTEGER, {
-    expLevel: { equals: employee?.expLevel },
-  });
+  const jobs = await jobService.getAllFilteredJobs(employee!);
 
   const suggestedJobs = jobService.sortJobsBasedOnEmployeeTitleAndBio(employeeInfo, jobs);
 

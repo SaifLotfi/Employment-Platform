@@ -1,4 +1,4 @@
-import { Job } from '@prisma/client';
+import { Employee, Job } from '@prisma/client';
 import stringSimilarity from 'string-similarity';
 
 import { employeeRepository } from '../models/employee.model';
@@ -68,18 +68,12 @@ const filterJobsAndGetTotalNumberOfPages = async (reqQueryObject: any, page: str
   };
 };
 
-const getAllFilteredJobs = async (empId: string) => {
-  const employee = await employeeRepository.getEmployeeById(empId);
-
-  const employeeInfo = `${employee?.title} ${employee?.bio}`;
-
+const getAllFilteredJobs = async (employee:Employee) => {
   const jobs = await jobRepository.getAllJobs(0, Number.MAX_SAFE_INTEGER, {
     expLevel: { equals: employee?.expLevel },
   });
 
-  return {
-    jobs,
-  };
+  return jobs;
 };
 
 const sortJobsBasedOnEmployeeTitleAndBio = (employeeInfo: string, jobs: Job[]) => {
@@ -124,5 +118,6 @@ export const jobService = {
   sortJobsBasedOnEmployeeTitleAndBio,
   getEmployeeInfo,
   applyForAJob,
-  changeJobApplicationStatus
+  changeJobApplicationStatus,
+  getAllFilteredJobs
 };
