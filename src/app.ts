@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser';
 import globalErrorHandler from './middlewares/error-handler.middleware';
 import employeeRouter from './routes/employee.routes';
 import employerRouter from './routes/employer.routes';
-import viewsRouter from './routes/routes';
+import viewsRouter from './routes/views.routes';
 import jobRouter from './routes/job.routes';
 
 dotenv.config();
