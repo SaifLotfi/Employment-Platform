@@ -52,6 +52,7 @@ const getAllJobs = async (req: Request, _res: Response) => {
     currentPage: page,
     totalPages,
     query,
+    expLevel: req.query.expLevel as string,
   };
 };
 
